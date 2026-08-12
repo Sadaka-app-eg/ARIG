@@ -218,12 +218,27 @@ tr:hover td{background:rgba(201,161,90,0.04);}
 .row-del{background:transparent; color:var(--muted); font-size:16px;}
 .row-del:hover{color:var(--danger);}
 
-/* fab */
 .fab{
-  position:fixed; bottom:26px; left:26px; width:56px; height:56px; border-radius:50%;
-  background:linear-gradient(135deg, var(--amber-light), var(--amber)); color:var(--bg);
-  font-size:26px; font-weight:900; display:flex; align-items:center; justify-content:center;
-  box-shadow:0 8px 24px rgba(185,119,46,0.45); z-index:30; transition:transform .15s;
+  position: fixed; bottom: 26px; left: 26px; width: 56px; height: 56px; border-radius: 50%;
+  
+  /* خلفية شبه شفافة مع لون ذهبي خفيف */
+  background: rgba(201, 161, 90, 0.45);
+  color: var(--ivory);
+  
+  /* إفكت التغبيش الزجاجي للأسفل */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  
+  border: 1px solid rgba(201, 161, 90, 0.6);
+  font-size: 28px; font-weight: 900; display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); z-index: 30; transition: all .2s ease;
+}
+
+/* حركة بسيطة لما تلمسه */
+.fab:hover {
+  transform: scale(1.08);
+  background: rgba(201, 161, 90, 0.65);
+  color: #fff;
 }
 .fab:hover{transform:scale(1.08);}
 
@@ -919,9 +934,11 @@ document.getElementById('reportGoBtn').onclick = async ()=>{
 };
 
 async function runReport(from, to){
-  const salesQ = query(collectionGroup(db,'sales'), where('date','>=',from), where('date','<=',to));
-  const expQ = query(collectionGroup(db,'expenses'), where('date','>=',from), where('date','<=',to));
+  const salesSnap = await getDocs(collectionGroup(db, 'sales'));
+  const expSnap = await getDocs(collectionGroup(db, 'expenses'));
 
+  const sales = salesSnap.docs.map(d => d.data()).filter(s => s.date >= from && s.date <= to);
+  const expenses = expSnap.docs.map(d => d.data()).filter(x => x.date >= from && x.date <= to);
   const [salesSnap, expSnap] = await Promise.all([getDocs(salesQ), getDocs(expQ)]);
   const sales = salesSnap.docs.map(d=>d.data());
   const expenses = expSnap.docs.map(d=>d.data());
