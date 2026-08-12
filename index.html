@@ -519,8 +519,17 @@ tr:hover td{background:rgba(201,161,90,0.04);}
     </div>
     <div class="field"><label>سعر الجرام (شراء)</label><input type="number" id="productBuy" min="0" step="0.1"></div>
     <div class="field"><label>سعر الجرام (بيع)</label><input type="number" id="productSell" min="0" step="0.1"></div>
-    <div class="field"><label>الرصيد الحالي (جرام)</label><input type="number" id="productStock" min="0" step="0.1"></div>
-    <div class="field"><label>حد التنبيه (جرام)</label><input type="number" id="productLowAlert" min="0" step="0.1" value="10"></div>
+<div class="field">
+      <label>الرصيد الحالي (جرام) <span style="font-size: 10px; color: var(--gold); font-weight: normal;">(اختياري - الوزن اللي عندك حالياً)</span></label>
+      <input type="number" id="productStock" min="0" step="0.1" placeholder="مثال: 1000 (لو سبته فاضي هيبقى مفتوح)">
+    </div>
+    <div class="field">
+      <label>حد التنبيه (جرام) <span style="font-size: 10px; color: var(--gold); font-weight: normal;">(اختياري - ينبهك لما الرصيد يقل عنه)</span></label>
+      <input type="number" id="productLowAlert" min="0" step="0.1" placeholder="مثال: 10">
+    </div>
+    
+    
+    
     <div class="modal-actions">
       <button class="btn-cancel" data-close>إلغاء</button>
       <button class="btn-primary" id="saveProductBtn">حفظ</button>
@@ -741,13 +750,17 @@ function openProductModal(id=null){
 
 document.getElementById('saveProductBtn').onclick = async ()=>{
   const id = document.getElementById('productId').value;
+  
+  const stockVal = document.getElementById('productStock').value;
+  const lowAlertVal = document.getElementById('productLowAlert').value;
+
   const data = {
     name: document.getElementById('productName').value.trim(),
     category: document.getElementById('productCat').value,
     buyPrice: parseFloat(document.getElementById('productBuy').value)||0,
     sellPrice: parseFloat(document.getElementById('productSell').value)||0,
-    stockGrams: parseFloat(document.getElementById('productStock').value)||0,
-    lowAlert: parseFloat(document.getElementById('productLowAlert').value)||10,
+    stockGrams: stockVal !== "" ? parseFloat(stockVal) : 9999, // لو فاضي يحط رصيد مفتوح
+    lowAlert: lowAlertVal !== "" ? parseFloat(lowAlertVal) : 0,  // لو فاضي يلغي التنبيه
   };
   if(!data.name){ toast('اكتب اسم الصنف'); return; }
   if(id){ await updateDoc(doc(db,'products',id), data); toast('تم تعديل الصنف'); }
