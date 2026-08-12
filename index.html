@@ -44,18 +44,22 @@
   --success: #4e7a42;
 }
 
-/* زر التبديل */
+/* وضع زرار الثيم فوق الشمال */
 .theme-btn {
+  position: absolute;
+  top: 14px;
+  left: 16px;
   background: var(--surface-2);
   border: 1px solid var(--border);
   color: var(--gold);
   border-radius: 999px;
-  padding: 8px 14px;
-  font-size: 13px;
+  padding: 6px 12px;
+  font-size: 12px;
   font-weight: 700;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
+  z-index: 25;
   transition: all .2s;
 }
 .theme-btn:hover {
@@ -279,15 +283,71 @@ tr:hover td{background:rgba(201,161,90,0.04);}
 @keyframes slidein{from{transform:translateY(10px); opacity:0;} to{transform:translateY(0); opacity:1;}}
 
 @media(max-width:640px){
-  .brand h1{font-size:24px;}
-  .search-box{max-width:none; width:100%; order:3;}
-  th,td{font-size:12px; padding:8px 10px;}
+  /* تصغير الخطوط والمسافات للشاشات الصغيرة */
+  body {
+    font-size: 13px;
+  }
+  
+  header.top {
+    padding: 45px 12px 12px; /* مسافة أعلى للزرار اللي فوق على الشمال */
+  }
+
+  .brand h1 {
+    font-size: 22px;
+  }
+  
+  .brand-img {
+    width: 36px;
+    height: 36px;
+  }
+
+  main {
+    padding: 14px 10px; /* تصغير الحواف الجانبية */
+  }
+
+  /* تصغير كروت الإحصائيات والملخص */
+  .summary-card {
+    padding: 14px 16px;
+  }
+  
+  .summary-card .value {
+    font-size: 26px;
+  }
+
+  /* الجداول */
+  th, td {
+    font-size: 11px;
+    padding: 8px 6px;
+  }
+
+  /* خيارات المبيعات والمخزون */
+  .search-box {
+    max-width: none;
+    width: 100%;
+    order: 3;
+    margin-top: 8px;
+  }
+
+  .date-pill {
+    padding: 5px 10px;
+    font-size: 12px;
+  }
+  
+  /* إخفاء نص الزرار في الشاشات الصغرى للتبسيط وترك الأيقونة */
+  #themeText {
+    display: none;
+  }
 }
 </style>
 </head>
 <body>
 
 <header class="top">
+  <!-- زرار الوضع الليلي فوق على الشمال -->
+  <button class="theme-btn" id="themeToggleBtn">
+    <span id="themeIcon">☀️</span>
+    <span id="themeText">الوضع النهاري</span>
+  </button>
   <div class="brand-row">
     <div class="brand">
 <img src="icon4.png" alt="ARIG" class="brand-img" id="brandLogoImg">
@@ -300,10 +360,7 @@ tr:hover td{background:rgba(201,161,90,0.04);}
       <input type="text" id="searchInput" placeholder="دور على صنف...">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
     </div>
-    <button class="theme-btn" id="themeToggleBtn">
-  <span id="themeIcon">☀️</span>
-  <span id="themeText">الوضع النهاري</span>
-</button>
+
   </div>
 
   <nav class="tabs">
