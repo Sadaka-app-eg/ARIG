@@ -5,6 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ARIG | أريج للعطور</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
+  <!-- PWA Manifest & Icons -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#15100b">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="icon3.jpg">
 <link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -847,6 +853,14 @@ themeBtn.onclick = () => {
     themeText.textContent = 'الوضع الليلي';
   }
 };
+  /* ---------- تسجيل الـ Service Worker للأوفلاين ---------- */
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then(reg => console.log('Service Worker Registered!', reg))
+      .catch(err => console.error('Service Worker Registration Failed:', err));
+  });
+}
 </script>
 </body>
 </html>
