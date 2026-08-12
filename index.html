@@ -939,10 +939,6 @@ async function runReport(from, to){
 
   const sales = salesSnap.docs.map(d => d.data()).filter(s => s.date >= from && s.date <= to);
   const expenses = expSnap.docs.map(d => d.data()).filter(x => x.date >= from && x.date <= to);
-  const [salesSnap, expSnap] = await Promise.all([getDocs(salesQ), getDocs(expQ)]);
-  const sales = salesSnap.docs.map(d=>d.data());
-  const expenses = expSnap.docs.map(d=>d.data());
-
   const revenue = sales.reduce((s,x)=> s + x.sellPrice*x.grams, 0);
   const grossProfit = sales.reduce((s,x)=> s + x.profit, 0);
   const expensesTotal = expenses.reduce((s,x)=> s + x.amount, 0);
@@ -1044,6 +1040,10 @@ if(pModal){
   <!-- نافذة تكبير اللوجو -->
 <div class="img-modal" id="logoModal">
   <img src="icon4.png" alt="ARIG Big Logo">
+</div>
+  <!-- نافذة تكبير صورة الصنف -->
+<div class="img-modal" id="productImgModal">
+  <img src="icon6.png" alt="صورة الصنف">
 </div>
 </body>
 </html>
