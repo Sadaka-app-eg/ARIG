@@ -220,9 +220,6 @@ tr:hover td{background:rgba(201,161,90,0.04);}
   background:linear-gradient(135deg, var(--amber-light), var(--amber)); color:var(--bg);
   font-size:26px; font-weight:900; display:flex; align-items:center; justify-content:center;
   box-shadow:0 8px 24px rgba(185,119,46,0.45); z-index:30; transition:transform .15s;
-  background-image: url('icon5.png');
-  background-size: cover;
-  background-position: center;
 }
 .fab:hover{transform:scale(1.08);}
 
@@ -784,7 +781,7 @@ function renderSales(filter=''){
   if(list.length===0){ body.innerHTML = `<tr class="empty-row"><td colspan="6">مفيش مبيعات مسجلة في اليوم ده</td></tr>`; return; }
   body.innerHTML = list.map(s=>`
     <tr>
-<td><div class="product-item-title"><img src="icon6.png" class="product-item-img">${s.productName}</div></td>
+<td><div class="product-item-title"><img src="icon6.png" class="product-item-img" onclick="openProductImgModal()">${s.productName}</div></td>
 <td>${s.buyPrice}</td>
       <td>${s.sellPrice}</td>
       <td>${s.grams}</td>
@@ -959,6 +956,16 @@ loadDay = function(dateStr) {
   origLoadDay(dateStr);
 };
 updateDayNameDisplay(currentDate);
+
+  /* ---------- تكبير صورة الصنف ---------- */
+function openProductImgModal(){
+  const modal = document.getElementById('productImgModal');
+  if(modal) modal.classList.add('active');
+}
+const pModal = document.getElementById('productImgModal');
+if(pModal){
+  pModal.onclick = () => pModal.classList.remove('active');
+}
 </script>
   <!-- نافذة تكبير اللوجو -->
 <div class="img-modal" id="logoModal">
