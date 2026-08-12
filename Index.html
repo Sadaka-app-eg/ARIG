@@ -23,6 +23,38 @@
   --font-display:'Aref Ruqaa', serif;
   --font-body:'Cairo', sans-serif;
 }
+  /* وضع النهاري Light Theme */
+[data-theme="light"] {
+  --bg: #f5f0eb;
+  --surface: #ffffff;
+  --surface-2: #eae3d9;
+  --border: #d2c4b1;
+  --gold: #9e7226;
+  --amber: #b9772e;
+  --amber-light: #d48b37;
+  --ivory: #2a2015;
+  --muted: #6e6151;
+  --danger: #c1554b;
+  --success: #4e7a42;
+}
+
+/* زر التبديل */
+.theme-btn {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--gold);
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all .2s;
+}
+.theme-btn:hover {
+  background: var(--border);
+}
 *{box-sizing:border-box; margin:0; padding:0;}
 html,body{height:100%;}
 body{
@@ -207,6 +239,10 @@ tr:hover td{background:rgba(201,161,90,0.04);}
       <input type="text" id="searchInput" placeholder="دور على صنف...">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
     </div>
+    <button class="theme-btn" id="themeToggleBtn">
+  <span id="themeIcon">☀️</span>
+  <span id="themeText">الوضع النهاري</span>
+</button>
   </div>
 
   <nav class="tabs">
@@ -397,15 +433,16 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 /* =========================================================
-   1) حط بيانات مشروع Firebase بتاعك هنا
+   1) بيانات مشروع Firebase الخاصة بك
    ========================================================= */
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyCBzbtsybL-z5yXJ9_8Io2_WPEV-B016Cw",
+  authDomain: "arig-2ff16.firebaseapp.com",
+  projectId: "arig-2ff16",
+  storageBucket: "arig-2ff16.firebasestorage.app",
+  messagingSenderId: "1053915638194",
+  appId: "1:1053915638194:web:6eeccc865b9a7025c59cab",
+  measurementId: "G-N0DRTF545Q"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -783,6 +820,33 @@ async function runReport(from, to){
 onAuthStateChanged(auth, user=>{
   if(user) loadDay(currentDate);
 });
+  /* ---------- الوضع الليلي والنهاري ---------- */
+const themeBtn = document.getElementById('themeToggleBtn');
+const themeIcon = document.getElementById('themeIcon');
+const themeText = document.getElementById('themeText');
+
+// استرجاع الثيم المحفوظ
+const savedTheme = localStorage.getItem('arig_theme') || 'dark';
+if (savedTheme === 'light') {
+  document.documentElement.setAttribute('data-theme', 'light');
+  themeIcon.textContent = '🌙';
+  themeText.textContent = 'الوضع الليلي';
+}
+
+themeBtn.onclick = () => {
+  const currentTheme = document.documentElement.getAttribute('data-theme');
+  if (currentTheme === 'light') {
+    document.documentElement.removeAttribute('data-theme');
+    localStorage.setItem('arig_theme', 'dark');
+    themeIcon.textContent = '☀️';
+    themeText.textContent = 'الوضع النهاري';
+  } else {
+    document.documentElement.setAttribute('data-theme', 'light');
+    localStorage.setItem('arig_theme', 'light');
+    themeIcon.textContent = '🌙';
+    themeText.textContent = 'الوضع الليلي';
+  }
+};
 </script>
 </body>
 </html>
