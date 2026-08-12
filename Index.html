@@ -435,9 +435,9 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import {
   getFirestore, collection, doc, setDoc, addDoc, updateDoc, deleteDoc,
-  onSnapshot, query, where, orderBy, getDocs, collectionGroup, increment, serverTimestamp
+  onSnapshot, query, where, orderBy, getDocs, collectionGroup, increment, serverTimestamp,
+  enableIndexedDbPersistence
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
 /* =========================================================
    1) بيانات مشروع Firebase الخاصة بك
    ========================================================= */
@@ -454,7 +454,14 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
-
+// تفعيل حفظ البيانات المحلي أثناء انقطاع الإنترنت
+enableIndexedDbPersistence(db).catch((err) => {
+    if (err.code == 'failed-precondition') {
+        console.log('المتصفح فاتح أكتر من تبويب، الأوفلاين شغال في تبويب واحد بس');
+    } else if (err.code == 'unimplemented') {
+        console.log('المتصفح الحالي مش بيدعم تفعيل الأوفلاين لـ Firestore');
+    }
+});
 signInAnonymously(auth).catch(err => console.error("Auth error:", err));
 
 /* ---------- state ---------- */
