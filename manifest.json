@@ -3,7 +3,7 @@
   "short_name": "ARIG",
   "description": "نظام إدارة المبيعات والمخزون اليومي - أريج للعطور",
   "start_url": "./index.html",
-  "display": "standalone",
+"display": "fullscreen",  
   "background_color": "#15100b",
   "theme_color": "#15100b",
   "lang": "ar",
