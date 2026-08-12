@@ -220,28 +220,25 @@ tr:hover td{background:rgba(201,161,90,0.04);}
 
 .fab{
   position: fixed; bottom: 26px; left: 26px; width: 56px; height: 56px; border-radius: 50%;
-  
-  /* خلفية شبه شفافة مع لون ذهبي خفيف */
-  background: rgba(201, 161, 90, 0.2);
-  color: var(--ivory);
-  
-  /* إفكت التغبيش الزجاجي للأسفل */
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  
-  border: 1px solid rgba(201, 161, 90, 0.6);
+  background: rgba(21, 16, 11, 0.35) !important;
+  color: var(--gold);
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  border: 1px solid rgba(201, 161, 90, 0.5);
   font-size: 28px; font-weight: 900; display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); z-index: 30; transition: all .2s ease;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4); z-index: 30; transition: all .25s ease;
 }
-
-/* حركة بسيطة لما تلمسه */
 .fab:hover {
-  transform: scale(1.08);
-  background: rgba(201, 161, 90, 0.65);
+  transform: scale(1.1);
+  background: rgba(201, 161, 90, 0.5) !important;
   color: #fff;
 }
-.fab:hover{transform:scale(1.08);}
-
+.time-tag {
+  font-size: 11px;
+  color: var(--muted);
+  direction: ltr;
+  display: inline-block;
+}
 /* products grid */
 .products-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:16px;}
 .product-card{
@@ -416,18 +413,19 @@ tr:hover td{background:rgba(201,161,90,0.04);}
         <h2>مبيعات اليوم</h2>
       </div>
       <table>
-        <thead>
+<thead>
           <tr>
             <th>اسم الصنف</th>
             <th>سعر الجرام (شراء)</th>
             <th>سعر الجرام (بيع)</th>
             <th>عدد الجرامات</th>
             <th>صافي الربح</th>
+            <th>وقت العملية</th>
             <th></th>
           </tr>
         </thead>
         <tbody id="salesTableBody">
-          <tr class="empty-row"><td colspan="6">مفيش مبيعات مسجلة النهارده لسه</td></tr>
+<tr class="empty-row"><td colspan="7">مفيش مبيعات مسجلة النهارده لسه</td></tr>          
         </tbody>
       </table>
     </div>
@@ -817,9 +815,13 @@ document.getElementById('saveSaleBtn').onclick = async ()=>{
   if(!p || !grams || grams<=0){ toast('اكمل بيانات العملية صح'); return; }
   if(grams > (p.stockGrams ?? 0)){ if(!confirm('الكمية أكبر من الرصيد المتاح، تكمل؟')) return; }
 
+const now = new Date();
+  const timeStr = now.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit', hour12: true });
+
   const profit = (sellPrice - p.buyPrice) * grams;
   await addDoc(collection(db,'days',currentDate,'sales'), {
     date: currentDate,
+    time: timeStr,
     productId: pid,
     productName: p.name,
     grams, buyPrice: p.buyPrice, sellPrice,
@@ -862,15 +864,16 @@ function loadDay(dateStr){
 
 function renderSales(filter=''){
   const body = document.getElementById('salesTableBody');
-  const list = todaySales.filter(s=> s.productName.includes(filter));
-  if(list.length===0){ body.innerHTML = `<tr class="empty-row"><td colspan="6">مفيش مبيعات مسجلة في اليوم ده</td></tr>`; return; }
+const list = todaySales.filter(s=> s.productName.includes(filter));
+  if(list.length===0){ body.innerHTML = `<tr class="empty-row"><td colspan="7">مفيش مبيعات مسجلة في اليوم ده</td></tr>`; return; }
   body.innerHTML = list.map(s=>`
     <tr>
-<td><div class="product-item-title"><img src="icon6.png" class="product-item-img" onclick="openProductImgModal()">${s.productName}</div></td>
-<td>${s.buyPrice}</td>
+      <td><div class="product-item-title"><img src="icon6.png" class="product-item-img" onclick="openProductImgModal()">${s.productName}</div></td>
+      <td>${s.buyPrice}</td>
       <td>${s.sellPrice}</td>
       <td>${s.grams}</td>
       <td class="${s.profit>=0?'profit-pos':'profit-neg'}">${money(s.profit)}</td>
+      <td><span class="time-tag">${s.time || '—'}</span></td>
       <td><button class="row-del" data-sale-del="${s.id}" data-grams="${s.grams}" data-pid="${s.productId}">✕</button></td>
     </tr>`).join('');
   body.querySelectorAll('[data-sale-del]').forEach(b=> b.onclick = async ()=>{
