@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARIG | أريج للعطور</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#15100b;
+  --surface:#1f1811;
+  --surface-2:#2a2015;
+  --border:#3a2e1e;
+  --gold:#c9a15a;
+  --amber:#b9772e;
+  --amber-light:#e8b168;
+  --ivory:#f3e9da;
+  --muted:#9c8b76;
+  --danger:#c1554b;
+  --success:#7a9b6f;
+  --radius:14px;
+  --font-display:'Aref Ruqaa', serif;
+  --font-body:'Cairo', sans-serif;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html,body{height:100%;}
+body{
+  background:
+    radial-gradient(ellipse at top left, rgba(201,161,90,0.08), transparent 55%),
+    var(--bg);
+  color:var(--ivory);
+  font-family:var(--font-body);
+  min-height:100vh;
+  padding-bottom:40px;
+}
+::selection{background:var(--amber); color:var(--bg);}
+button{font-family:inherit; cursor:pointer; border:none;}
+input,select{font-family:inherit;}
+
+/* header */
+header.top{
+  padding:22px 24px 18px;
+  border-bottom:1px solid var(--border);
+  background:linear-gradient(180deg, rgba(42,32,21,0.6), transparent);
+  position:sticky; top:0; z-index:20;
+  backdrop-filter:blur(10px);
+}
+.brand-row{display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;}
+.brand{display:flex; align-items:center; gap:12px;}
+.brand svg{width:38px; height:38px;}
+.brand h1{font-family:var(--font-display); font-size:30px; color:var(--gold); letter-spacing:1px;}
+.brand span{display:block; font-size:11px; color:var(--muted); margin-top:-2px;}
+
+.search-box{
+  position:relative; flex:1; max-width:340px; min-width:200px;
+}
+.search-box input{
+  width:100%; background:var(--surface-2); border:1px solid var(--border);
+  border-radius:999px; padding:10px 40px 10px 16px; color:var(--ivory); font-size:14px;
+  outline:none; transition:border-color .2s;
+}
+.search-box input:focus{border-color:var(--gold);}
+.search-box svg{position:absolute; right:14px; top:50%; transform:translateY(-50%); width:16px; height:16px; stroke:var(--muted);}
+
+/* nav tabs */
+nav.tabs{display:flex; gap:6px; margin-top:18px; flex-wrap:wrap;}
+nav.tabs button{
+  background:transparent; color:var(--muted); padding:9px 18px; border-radius:999px;
+  font-size:14px; font-weight:600; border:1px solid transparent; transition:all .2s;
+}
+nav.tabs button.active{background:var(--surface-2); color:var(--gold); border-color:var(--border);}
+nav.tabs button:hover:not(.active){color:var(--ivory);}
+
+/* date strip */
+.date-strip{display:flex; align-items:center; gap:10px; margin-top:14px;}
+.date-strip button.arrow{
+  width:34px; height:34px; border-radius:50%; background:var(--surface-2); color:var(--gold);
+  border:1px solid var(--border); font-size:16px; display:flex; align-items:center; justify-content:center;
+}
+.date-strip button.arrow:hover{background:var(--amber); color:var(--bg);}
+.date-pill{
+  background:var(--surface); border:1px solid var(--border); border-radius:999px;
+  padding:8px 18px; display:flex; align-items:center; gap:10px; font-size:14px; color:var(--ivory);
+}
+.date-pill input[type=date]{background:transparent; border:none; color:var(--gold); font-weight:700; outline:none; color-scheme:dark;}
+.today-btn{background:transparent; color:var(--amber-light); font-size:13px; font-weight:700; text-decoration:underline; text-underline-offset:3px;}
+
+main{max-width:1100px; margin:0 auto; padding:26px 24px;}
+.view{display:none;}
+.view.active{display:block;}
+
+/* summary card */
+.summary-card{
+  background:linear-gradient(135deg, var(--surface-2), var(--surface));
+  border:1px solid var(--border); border-radius:var(--radius); padding:22px 26px;
+  display:flex; align-items:center; justify-content:space-between; margin-bottom:22px; flex-wrap:wrap; gap:14px;
+}
+.summary-card .label{color:var(--muted); font-size:13px; margin-bottom:6px;}
+.summary-card .value{font-family:var(--font-display); font-size:34px; color:var(--gold);}
+.summary-card .value.neg{color:var(--danger);}
+.mini-stats{display:flex; gap:22px; flex-wrap:wrap;}
+.mini-stats div{text-align:center;}
+.mini-stats .n{font-size:18px; font-weight:800; color:var(--ivory);}
+.mini-stats .l{font-size:11px; color:var(--muted);}
+
+/* table */
+.card{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; margin-bottom:20px;}
+.card-head{display:flex; align-items:center; justify-content:space-between; padding:16px 20px; border-bottom:1px solid var(--border);}
+.card-head h2{font-size:16px; color:var(--gold); font-weight:700;}
+table{width:100%; border-collapse:collapse;}
+th{background:var(--surface-2); color:var(--muted); font-size:12px; font-weight:700; text-align:right; padding:10px 16px;}
+td{padding:12px 16px; font-size:14px; border-top:1px solid var(--border);}
+tr:hover td{background:rgba(201,161,90,0.04);}
+.profit-pos{color:var(--success); font-weight:700;}
+.profit-neg{color:var(--danger); font-weight:700;}
+.empty-row td{text-align:center; color:var(--muted); padding:34px; font-size:13px;}
+.row-del{background:transparent; color:var(--muted); font-size:16px;}
+.row-del:hover{color:var(--danger);}
+
+/* fab */
+.fab{
+  position:fixed; bottom:26px; left:26px; width:56px; height:56px; border-radius:50%;
+  background:linear-gradient(135deg, var(--amber-light), var(--amber)); color:var(--bg);
+  font-size:26px; font-weight:900; display:flex; align-items:center; justify-content:center;
+  box-shadow:0 8px 24px rgba(185,119,46,0.45); z-index:30; transition:transform .15s;
+}
+.fab:hover{transform:scale(1.08);}
+
+/* products grid */
+.products-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:16px;}
+.product-card{
+  background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:16px;
+  display:flex; flex-direction:column; gap:10px; position:relative; overflow:hidden;
+}
+.product-card.low::before{
+  content:'رصيد منخفض'; position:absolute; top:10px; left:-30px; background:var(--danger); color:#fff;
+  font-size:10px; font-weight:800; padding:3px 34px; transform:rotate(-40deg); box-shadow:0 2px 6px rgba(0,0,0,.4);
+}
+.product-top{display:flex; gap:14px; align-items:center;}
+.bottle-gauge{width:34px; height:56px; flex-shrink:0;}
+.product-name{font-weight:800; font-size:16px; color:var(--ivory);}
+.product-cat{font-size:11px; color:var(--muted);}
+.price-row{display:flex; justify-content:space-between; font-size:12px; color:var(--muted); border-top:1px dashed var(--border); padding-top:8px;}
+.price-row b{color:var(--amber-light); font-weight:700;}
+.stock-num{font-size:13px; color:var(--gold); font-weight:700;}
+.product-actions{display:flex; gap:8px; margin-top:2px;}
+.product-actions button{flex:1; background:var(--surface-2); color:var(--ivory); font-size:12px; padding:7px; border-radius:8px; border:1px solid var(--border);}
+.product-actions button:hover{border-color:var(--gold); color:var(--gold);}
+.product-actions button.danger:hover{border-color:var(--danger); color:var(--danger);}
+
+/* reports */
+.range-controls{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:18px; align-items:center;}
+.range-controls button.preset{background:var(--surface-2); color:var(--ivory); padding:8px 16px; border-radius:999px; font-size:13px; border:1px solid var(--border);}
+.range-controls button.preset.active{background:var(--amber); color:var(--bg); border-color:var(--amber); font-weight:700;}
+.range-controls input[type=date]{background:var(--surface-2); border:1px solid var(--border); color:var(--ivory); padding:8px 12px; border-radius:8px; color-scheme:dark; font-size:13px;}
+.range-controls .go{background:var(--gold); color:var(--bg); padding:8px 20px; border-radius:8px; font-weight:800; font-size:13px;}
+.report-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:14px; margin-bottom:18px;}
+.report-tile{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:16px;}
+.report-tile .l{font-size:12px; color:var(--muted); margin-bottom:6px;}
+.report-tile .v{font-size:24px; font-weight:800; color:var(--gold); font-family:var(--font-display);}
+
+/* modal */
+.overlay{position:fixed; inset:0; background:rgba(10,7,4,0.7); display:none; align-items:center; justify-content:center; z-index:100; padding:20px;}
+.overlay.active{display:flex;}
+.modal{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); width:100%; max-width:420px; padding:24px; max-height:90vh; overflow-y:auto;}
+.modal h3{color:var(--gold); font-size:18px; margin-bottom:18px; font-family:var(--font-display); font-size:22px;}
+.field{margin-bottom:14px;}
+.field label{display:block; font-size:12px; color:var(--muted); margin-bottom:6px;}
+.field input, .field select{
+  width:100%; background:var(--surface-2); border:1px solid var(--border); border-radius:8px;
+  padding:10px 12px; color:var(--ivory); font-size:14px; outline:none;
+}
+.field input:focus, .field select:focus{border-color:var(--gold);}
+.modal-actions{display:flex; gap:10px; margin-top:18px;}
+.modal-actions button{flex:1; padding:11px; border-radius:8px; font-weight:700; font-size:14px;}
+.btn-primary{background:linear-gradient(135deg, var(--amber-light), var(--amber)); color:var(--bg);}
+.btn-cancel{background:var(--surface-2); color:var(--muted); border:1px solid var(--border);}
+.hint{font-size:12px; color:var(--muted); margin-top:16px; line-height:1.8;}
+
+.toast-wrap{position:fixed; bottom:26px; right:26px; z-index:200; display:flex; flex-direction:column; gap:8px;}
+.toast{background:var(--surface-2); border:1px solid var(--gold); color:var(--ivory); padding:12px 18px; border-radius:10px; font-size:13px; box-shadow:0 6px 20px rgba(0,0,0,.4); animation:slidein .2s ease;}
+@keyframes slidein{from{transform:translateY(10px); opacity:0;} to{transform:translateY(0); opacity:1;}}
+
+@media(max-width:640px){
+  .brand h1{font-size:24px;}
+  .search-box{max-width:none; width:100%; order:3;}
+  th,td{font-size:12px; padding:8px 10px;}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="brand-row">
+    <div class="brand">
+      <svg viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.4">
+        <path d="M10 2h4v3.2c0 .6.3 1.1.8 1.5C16 7.6 17 9.4 17 11.5V20a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2v-8.5c0-2.1 1-3.9 2.2-4.8.5-.4.8-.9.8-1.5V2Z"/>
+        <path d="M8 12h8"/>
+      </svg>
+      <div>
+        <h1>ARIG</h1>
+        <span>أريج للعطور — سجل يومي</span>
+      </div>
+    </div>
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="دور على صنف...">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+    </div>
+  </div>
+
+  <nav class="tabs">
+    <button class="tab-btn active" data-view="today">سجل اليوم</button>
+    <button class="tab-btn" data-view="stock">المخزون</button>
+    <button class="tab-btn" data-view="reports">التقارير</button>
+  </nav>
+
+  <div class="date-strip" id="dateStrip">
+    <button class="arrow" id="prevDay">‹</button>
+    <div class="date-pill">
+      <input type="date" id="dateInput">
+    </div>
+    <button class="arrow" id="nextDay">›</button>
+    <button class="today-btn" id="jumpToday">النهارده</button>
+  </div>
+</header>
+
+<main>
+
+  <!-- ============ TODAY VIEW ============ -->
+  <section class="view active" id="view-today">
+    <div class="summary-card">
+      <div>
+        <div class="label">صافي ربح اليوم</div>
+        <div class="value" id="dayProfit">٠.٠٠ ج.م</div>
+      </div>
+      <div class="mini-stats">
+        <div><div class="n" id="dayRevenue">0</div><div class="l">إجمالي المبيعات</div></div>
+        <div><div class="n" id="dayExpenses">0</div><div class="l">مصروفات اليوم</div></div>
+        <div><div class="n" id="dayCount">0</div><div class="l">عدد العمليات</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <h2>مبيعات اليوم</h2>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>اسم الصنف</th>
+            <th>سعر الجرام (شراء)</th>
+            <th>سعر الجرام (بيع)</th>
+            <th>عدد الجرامات</th>
+            <th>صافي الربح</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="salesTableBody">
+          <tr class="empty-row"><td colspan="6">مفيش مبيعات مسجلة النهارده لسه</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <h2>مصروفات اليوم</h2>
+        <button class="row-del" style="color:var(--gold); font-size:22px;" id="addExpenseBtn" title="إضافة مصروف">+</button>
+      </div>
+      <table>
+        <thead><tr><th>البيان</th><th>القيمة</th><th></th></tr></thead>
+        <tbody id="expensesTableBody">
+          <tr class="empty-row"><td colspan="3">مفيش مصروفات مسجلة</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============ STOCK VIEW ============ -->
+  <section class="view" id="view-stock">
+    <div class="products-grid" id="productsGrid"></div>
+  </section>
+
+  <!-- ============ REPORTS VIEW ============ -->
+  <section class="view" id="view-reports">
+    <div class="range-controls">
+      <button class="preset active" data-range="7">آخر أسبوع</button>
+      <button class="preset" data-range="30">آخر شهر</button>
+      <button class="preset" data-range="custom">مدة مخصصة</button>
+      <input type="date" id="reportFrom" style="display:none">
+      <span id="reportToWrap" style="display:none; color:var(--muted); font-size:13px;">إلى</span>
+      <input type="date" id="reportTo" style="display:none">
+      <button class="go" id="reportGoBtn">احسب</button>
+    </div>
+    <div class="report-grid">
+      <div class="report-tile"><div class="l">إجمالي المبيعات</div><div class="v" id="repRevenue">—</div></div>
+      <div class="report-tile"><div class="l">صافي الربح</div><div class="v" id="repProfit">—</div></div>
+      <div class="report-tile"><div class="l">إجمالي المصروفات</div><div class="v" id="repExpenses">—</div></div>
+      <div class="report-tile"><div class="l">الصنف الأكتر مبيعًا</div><div class="v" id="repTop" style="font-size:16px;">—</div></div>
+    </div>
+    <div class="card">
+      <div class="card-head"><h2>تفصيل الأصناف في المدة دي</h2></div>
+      <table>
+        <thead><tr><th>الصنف</th><th>الجرامات المباعة</th><th>الربح</th></tr></thead>
+        <tbody id="reportTableBody"><tr class="empty-row"><td colspan="3">اضغط "احسب" لعرض التقرير</td></tr></tbody>
+      </table>
+    </div>
+  </section>
+
+</main>
+
+<button class="fab" id="fabAdd" title="إضافة">+</button>
+
+<!-- ===== MODAL: add sale ===== -->
+<div class="overlay" id="modalSale">
+  <div class="modal">
+    <h3>تسجيل عملية بيع</h3>
+    <div class="field">
+      <label>الصنف</label>
+      <select id="saleProduct"></select>
+    </div>
+    <div class="field">
+      <label>عدد الجرامات</label>
+      <input type="number" id="saleGrams" min="0.1" step="0.1" placeholder="مثال: 5">
+    </div>
+    <div class="field">
+      <label>سعر الجرام (بيع) — قابل للتعديل</label>
+      <input type="number" id="saleSellPrice" min="0" step="0.1">
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" data-close>إلغاء</button>
+      <button class="btn-primary" id="saveSaleBtn">حفظ</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL: add/edit product ===== -->
+<div class="overlay" id="modalProduct">
+  <div class="modal">
+    <h3 id="productModalTitle">إضافة صنف جديد</h3>
+    <input type="hidden" id="productId">
+    <div class="field"><label>اسم الصنف</label><input type="text" id="productName" placeholder="مثال: عود ملكي"></div>
+    <div class="field"><label>التصنيف</label>
+      <select id="productCat">
+        <option value="رجالي">رجالي</option>
+        <option value="حريمي">حريمي</option>
+        <option value="مستلزمات">مستلزمات</option>
+      </select>
+    </div>
+    <div class="field"><label>سعر الجرام (شراء)</label><input type="number" id="productBuy" min="0" step="0.1"></div>
+    <div class="field"><label>سعر الجرام (بيع)</label><input type="number" id="productSell" min="0" step="0.1"></div>
+    <div class="field"><label>الرصيد الحالي (جرام)</label><input type="number" id="productStock" min="0" step="0.1"></div>
+    <div class="field"><label>حد التنبيه (جرام)</label><input type="number" id="productLowAlert" min="0" step="0.1" value="10"></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" data-close>إلغاء</button>
+      <button class="btn-primary" id="saveProductBtn">حفظ</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL: restock ===== -->
+<div class="overlay" id="modalRestock">
+  <div class="modal">
+    <h3>إضافة كمية للمخزون</h3>
+    <input type="hidden" id="restockId">
+    <div class="field"><label>الكمية المضافة (جرام)</label><input type="number" id="restockAmount" min="0.1" step="0.1"></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" data-close>إلغاء</button>
+      <button class="btn-primary" id="saveRestockBtn">إضافة</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL: expense ===== -->
+<div class="overlay" id="modalExpense">
+  <div class="modal">
+    <h3>إضافة مصروف</h3>
+    <div class="field"><label>البيان</label><input type="text" id="expenseDesc" placeholder="مثال: زجاجات + تغليف"></div>
+    <div class="field"><label>القيمة</label><input type="number" id="expenseAmount" min="0" step="0.1"></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" data-close>إلغاء</button>
+      <button class="btn-primary" id="saveExpenseBtn">حفظ</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getAuth, signInAnonymously, onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {
+  getFirestore, collection, doc, setDoc, addDoc, updateDoc, deleteDoc,
+  onSnapshot, query, where, orderBy, getDocs, collectionGroup, increment, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+/* =========================================================
+   1) حط بيانات مشروع Firebase بتاعك هنا
+   ========================================================= */
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_PROJECT.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+signInAnonymously(auth).catch(err => console.error("Auth error:", err));
+
+/* ---------- state ---------- */
+let currentDate = fmtDate(new Date());
+let products = [];        // كل الأصناف
+let todaySales = [];      // مبيعات اليوم الحالي
+let todayExpenses = [];   // مصروفات اليوم الحالي
+let unsubSales = null, unsubExpenses = null;
+
+function fmtDate(d){
+  const y=d.getFullYear(), m=String(d.getMonth()+1).padStart(2,'0'), day=String(d.getDate()).padStart(2,'0');
+  return `${y}-${m}-${day}`;
+}
+function money(n){
+  return (Math.round((n||0)*100)/100).toLocaleString('ar-EG', {minimumFractionDigits:2, maximumFractionDigits:2}) + " ج.م";
+}
+function toast(msg){
+  const t = document.createElement('div');
+  t.className = 'toast'; t.textContent = msg;
+  document.getElementById('toastWrap').appendChild(t);
+  setTimeout(()=>t.remove(), 2600);
+}
+
+/* ---------- date navigation ---------- */
+const dateInput = document.getElementById('dateInput');
+dateInput.value = currentDate;
+dateInput.addEventListener('change', ()=>{ currentDate = dateInput.value; loadDay(currentDate); });
+
+document.getElementById('prevDay').onclick = ()=>{
+  const d = new Date(currentDate); d.setDate(d.getDate()-1);
+  currentDate = fmtDate(d); dateInput.value = currentDate; loadDay(currentDate);
+};
+document.getElementById('nextDay').onclick = ()=>{
+  const d = new Date(currentDate); d.setDate(d.getDate()+1);
+  currentDate = fmtDate(d); dateInput.value = currentDate; loadDay(currentDate);
+};
+document.getElementById('jumpToday').onclick = ()=>{
+  currentDate = fmtDate(new Date()); dateInput.value = currentDate; loadDay(currentDate);
+};
+
+/* ---------- tabs ---------- */
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.onclick = ()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('view-'+btn.dataset.view).classList.add('active');
+    document.getElementById('dateStrip').style.display = btn.dataset.view === 'today' ? 'flex' : 'none';
+  };
+});
+
+/* ---------- modals ---------- */
+document.querySelectorAll('[data-close]').forEach(b=>b.onclick = ()=>b.closest('.overlay').classList.remove('active'));
+document.querySelectorAll('.overlay').forEach(ov=> ov.addEventListener('click', e=>{ if(e.target===ov) ov.classList.remove('active'); }));
+
+document.getElementById('fabAdd').onclick = ()=>{
+  const activeView = document.querySelector('.view.active').id;
+  if(activeView === 'view-stock'){ openProductModal(); }
+  else { openSaleModal(); }
+};
+
+/* =========================================================
+   2) المنتجات / المخزون
+   ========================================================= */
+onSnapshot(collection(db,'products'), snap=>{
+  products = snap.docs.map(d=>({id:d.id, ...d.data()}));
+  renderProducts();
+  renderSaleProductOptions();
+});
+
+function renderProducts(filter=''){
+  const grid = document.getElementById('productsGrid');
+  const list = products.filter(p=> p.name.includes(filter));
+  if(list.length === 0){
+    grid.innerHTML = `<div style="color:var(--muted); grid-column:1/-1; text-align:center; padding:40px;">مفيش أصناف. دوس على + عشان تضيف أول صنف.</div>`;
+    return;
+  }
+  grid.innerHTML = list.map(p=>{
+    const low = (p.stockGrams ?? 0) <= (p.lowAlert ?? 10);
+    const pct = Math.min(100, Math.round(((p.stockGrams ?? 0) / Math.max(p.lowAlert*3 || 30, 30)) * 100));
+    return `
+    <div class="product-card ${low?'low':''}">
+      <div class="product-top">
+        ${bottleSvg(pct)}
+        <div>
+          <div class="product-name">${p.name}</div>
+          <div class="product-cat">${p.category || ''}</div>
+        </div>
+      </div>
+      <div class="price-row"><span>شراء</span><b>${p.buyPrice ?? 0} ج/جم</b></div>
+      <div class="price-row"><span>بيع</span><b>${p.sellPrice ?? 0} ج/جم</b></div>
+      <div class="stock-num">الرصيد: ${p.stockGrams ?? 0} جم</div>
+      <div class="product-actions">
+        <button data-restock="${p.id}">تزويد</button>
+        <button data-edit="${p.id}">تعديل</button>
+        <button class="danger" data-del="${p.id}">حذف</button>
+      </div>
+    </div>`;
+  }).join('');
+
+  grid.querySelectorAll('[data-restock]').forEach(b=> b.onclick = ()=> openRestockModal(b.dataset.restock));
+  grid.querySelectorAll('[data-edit]').forEach(b=> b.onclick = ()=> openProductModal(b.dataset.edit));
+  grid.querySelectorAll('[data-del]').forEach(b=> b.onclick = ()=> deleteProduct(b.dataset.del));
+}
+
+function bottleSvg(pct){
+  const fillHeight = 34 * (pct/100);
+  const fillY = 40 - fillHeight;
+  return `
+  <svg class="bottle-gauge" viewBox="0 0 34 56">
+    <defs><clipPath id="clip"><rect x="4" y="6" width="26" height="44" rx="4"/></clipPath></defs>
+    <rect x="12" y="0" width="10" height="8" rx="2" fill="var(--border)"/>
+    <rect x="4" y="6" width="26" height="44" rx="4" fill="var(--surface-2)" stroke="var(--border)" stroke-width="1.5"/>
+    <g clip-path="url(#clip)">
+      <rect x="4" y="${fillY}" width="26" height="${fillHeight}" fill="var(--amber-light)" opacity="0.85"/>
+    </g>
+  </svg>`;
+}
+
+function openProductModal(id=null){
+  document.getElementById('productModalTitle').textContent = id ? 'تعديل الصنف' : 'إضافة صنف جديد';
+  document.getElementById('productId').value = id || '';
+  if(id){
+    const p = products.find(x=>x.id===id);
+    document.getElementById('productName').value = p.name;
+    document.getElementById('productCat').value = p.category || 'رجالي';
+    document.getElementById('productBuy').value = p.buyPrice;
+    document.getElementById('productSell').value = p.sellPrice;
+    document.getElementById('productStock').value = p.stockGrams;
+    document.getElementById('productLowAlert').value = p.lowAlert ?? 10;
+  } else {
+    ['productName'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('productBuy').value='';
+    document.getElementById('productSell').value='';
+    document.getElementById('productStock').value='';
+    document.getElementById('productLowAlert').value=10;
+  }
+  document.getElementById('modalProduct').classList.add('active');
+}
+
+document.getElementById('saveProductBtn').onclick = async ()=>{
+  const id = document.getElementById('productId').value;
+  const data = {
+    name: document.getElementById('productName').value.trim(),
+    category: document.getElementById('productCat').value,
+    buyPrice: parseFloat(document.getElementById('productBuy').value)||0,
+    sellPrice: parseFloat(document.getElementById('productSell').value)||0,
+    stockGrams: parseFloat(document.getElementById('productStock').value)||0,
+    lowAlert: parseFloat(document.getElementById('productLowAlert').value)||10,
+  };
+  if(!data.name){ toast('اكتب اسم الصنف'); return; }
+  if(id){ await updateDoc(doc(db,'products',id), data); toast('تم تعديل الصنف'); }
+  else{ await addDoc(collection(db,'products'), data); toast('تم إضافة الصنف'); }
+  document.getElementById('modalProduct').classList.remove('active');
+};
+
+async function deleteProduct(id){
+  if(!confirm('متأكد من حذف الصنف ده؟')) return;
+  await deleteDoc(doc(db,'products',id));
+  toast('تم الحذف');
+}
+
+function openRestockModal(id){
+  document.getElementById('restockId').value = id;
+  document.getElementById('restockAmount').value = '';
+  document.getElementById('modalRestock').classList.add('active');
+}
+document.getElementById('saveRestockBtn').onclick = async ()=>{
+  const id = document.getElementById('restockId').value;
+  const amt = parseFloat(document.getElementById('restockAmount').value);
+  if(!amt || amt<=0){ toast('اكتب كمية صحيحة'); return; }
+  await updateDoc(doc(db,'products',id), { stockGrams: increment(amt) });
+  toast('تم تزويد المخزون');
+  document.getElementById('modalRestock').classList.remove('active');
+};
+
+/* =========================================================
+   3) سجل المبيعات اليومي
+   ========================================================= */
+function renderSaleProductOptions(){
+  const sel = document.getElementById('saleProduct');
+  sel.innerHTML = products.map(p=>`<option value="${p.id}">${p.name} (متبقي ${p.stockGrams ?? 0} جم)</option>`).join('');
+}
+document.getElementById('saleProduct').addEventListener('change', e=>{
+  const p = products.find(x=>x.id===e.target.value);
+  if(p) document.getElementById('saleSellPrice').value = p.sellPrice;
+});
+
+function openSaleModal(){
+  if(products.length===0){ toast('ضيف صنف الأول من تبويب المخزون'); return; }
+  renderSaleProductOptions();
+  document.getElementById('saleGrams').value='';
+  const first = products[0];
+  document.getElementById('saleSellPrice').value = first.sellPrice;
+  document.getElementById('modalSale').classList.add('active');
+}
+
+document.getElementById('saveSaleBtn').onclick = async ()=>{
+  const pid = document.getElementById('saleProduct').value;
+  const grams = parseFloat(document.getElementById('saleGrams').value);
+  const sellPrice = parseFloat(document.getElementById('saleSellPrice').value);
+  const p = products.find(x=>x.id===pid);
+  if(!p || !grams || grams<=0){ toast('اكمل بيانات العملية صح'); return; }
+  if(grams > (p.stockGrams ?? 0)){ if(!confirm('الكمية أكبر من الرصيد المتاح، تكمل؟')) return; }
+
+  const profit = (sellPrice - p.buyPrice) * grams;
+  await addDoc(collection(db,'days',currentDate,'sales'), {
+    date: currentDate,
+    productId: pid,
+    productName: p.name,
+    grams, buyPrice: p.buyPrice, sellPrice,
+    profit, createdAt: serverTimestamp()
+  });
+  await updateDoc(doc(db,'products',pid), { stockGrams: increment(-grams) });
+  toast('تم تسجيل عملية البيع');
+  document.getElementById('modalSale').classList.remove('active');
+};
+
+document.getElementById('addExpenseBtn').onclick = ()=>{
+  document.getElementById('expenseDesc').value='';
+  document.getElementById('expenseAmount').value='';
+  document.getElementById('modalExpense').classList.add('active');
+};
+document.getElementById('saveExpenseBtn').onclick = async ()=>{
+  const desc = document.getElementById('expenseDesc').value.trim();
+  const amount = parseFloat(document.getElementById('expenseAmount').value);
+  if(!desc || !amount){ toast('اكمل بيانات المصروف'); return; }
+  await addDoc(collection(db,'days',currentDate,'expenses'), { date: currentDate, desc, amount, createdAt: serverTimestamp() });
+  toast('تم إضافة المصروف');
+  document.getElementById('modalExpense').classList.remove('active');
+};
+
+function loadDay(dateStr){
+  if(unsubSales) unsubSales();
+  if(unsubExpenses) unsubExpenses();
+
+  unsubSales = onSnapshot(collection(db,'days',dateStr,'sales'), snap=>{
+    todaySales = snap.docs.map(d=>({id:d.id, ...d.data()}));
+    renderSales();
+    renderDaySummary();
+  });
+  unsubExpenses = onSnapshot(collection(db,'days',dateStr,'expenses'), snap=>{
+    todayExpenses = snap.docs.map(d=>({id:d.id, ...d.data()}));
+    renderExpenses();
+    renderDaySummary();
+  });
+}
+
+function renderSales(filter=''){
+  const body = document.getElementById('salesTableBody');
+  const list = todaySales.filter(s=> s.productName.includes(filter));
+  if(list.length===0){ body.innerHTML = `<tr class="empty-row"><td colspan="6">مفيش مبيعات مسجلة في اليوم ده</td></tr>`; return; }
+  body.innerHTML = list.map(s=>`
+    <tr>
+      <td>${s.productName}</td>
+      <td>${s.buyPrice}</td>
+      <td>${s.sellPrice}</td>
+      <td>${s.grams}</td>
+      <td class="${s.profit>=0?'profit-pos':'profit-neg'}">${money(s.profit)}</td>
+      <td><button class="row-del" data-sale-del="${s.id}" data-grams="${s.grams}" data-pid="${s.productId}">✕</button></td>
+    </tr>`).join('');
+  body.querySelectorAll('[data-sale-del]').forEach(b=> b.onclick = async ()=>{
+    if(!confirm('حذف عملية البيع دي؟')) return;
+    await deleteDoc(doc(db,'days',currentDate,'sales',b.dataset.saleDel));
+    await updateDoc(doc(db,'products',b.dataset.pid), { stockGrams: increment(parseFloat(b.dataset.grams)) });
+    toast('تم الحذف واسترجاع الكمية للمخزون');
+  });
+}
+
+function renderExpenses(){
+  const body = document.getElementById('expensesTableBody');
+  if(todayExpenses.length===0){ body.innerHTML = `<tr class="empty-row"><td colspan="3">مفيش مصروفات مسجلة</td></tr>`; return; }
+  body.innerHTML = todayExpenses.map(x=>`
+    <tr><td>${x.desc}</td><td>${money(x.amount)}</td>
+    <td><button class="row-del" data-exp-del="${x.id}">✕</button></td></tr>`).join('');
+  body.querySelectorAll('[data-exp-del]').forEach(b=> b.onclick = async ()=>{
+    if(!confirm('حذف المصروف ده؟')) return;
+    await deleteDoc(doc(db,'days',currentDate,'expenses',b.dataset.expDel));
+  });
+}
+
+function renderDaySummary(){
+  const revenue = todaySales.reduce((s,x)=> s + (x.sellPrice*x.grams), 0);
+  const grossProfit = todaySales.reduce((s,x)=> s + x.profit, 0);
+  const expensesTotal = todayExpenses.reduce((s,x)=> s + x.amount, 0);
+  const netProfit = grossProfit - expensesTotal;
+
+  document.getElementById('dayProfit').textContent = money(netProfit);
+  document.getElementById('dayProfit').className = 'value' + (netProfit<0 ? ' neg':'');
+  document.getElementById('dayRevenue').textContent = money(revenue);
+  document.getElementById('dayExpenses').textContent = money(expensesTotal);
+  document.getElementById('dayCount').textContent = todaySales.length;
+}
+
+/* =========================================================
+   4) البحث
+   ========================================================= */
+document.getElementById('searchInput').addEventListener('input', e=>{
+  const val = e.target.value.trim();
+  const activeView = document.querySelector('.view.active').id;
+  if(activeView === 'view-stock') renderProducts(val);
+  else renderSales(val);
+});
+
+/* =========================================================
+   5) التقارير
+   ========================================================= */
+let reportRangeDays = 7;
+document.querySelectorAll('.preset').forEach(btn=>{
+  btn.onclick = ()=>{
+    document.querySelectorAll('.preset').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const isCustom = btn.dataset.range === 'custom';
+    document.getElementById('reportFrom').style.display = isCustom ? 'inline-block':'none';
+    document.getElementById('reportToWrap').style.display = isCustom ? 'inline-block':'none';
+    document.getElementById('reportTo').style.display = isCustom ? 'inline-block':'none';
+    if(!isCustom) reportRangeDays = parseInt(btn.dataset.range);
+  };
+});
+
+document.getElementById('reportGoBtn').onclick = async ()=>{
+  let from, to;
+  const customActive = document.querySelector('.preset.active').dataset.range === 'custom';
+  if(customActive){
+    from = document.getElementById('reportFrom').value;
+    to = document.getElementById('reportTo').value;
+    if(!from || !to){ toast('اختار المدة الأول'); return; }
+  } else {
+    const toD = new Date(); const fromD = new Date(); fromD.setDate(fromD.getDate() - (reportRangeDays-1));
+    from = fmtDate(fromD); to = fmtDate(toD);
+  }
+  await runReport(from, to);
+};
+
+async function runReport(from, to){
+  const salesQ = query(collectionGroup(db,'sales'), where('date','>=',from), where('date','<=',to));
+  const expQ = query(collectionGroup(db,'expenses'), where('date','>=',from), where('date','<=',to));
+
+  const [salesSnap, expSnap] = await Promise.all([getDocs(salesQ), getDocs(expQ)]);
+  const sales = salesSnap.docs.map(d=>d.data());
+  const expenses = expSnap.docs.map(d=>d.data());
+
+  const revenue = sales.reduce((s,x)=> s + x.sellPrice*x.grams, 0);
+  const grossProfit = sales.reduce((s,x)=> s + x.profit, 0);
+  const expensesTotal = expenses.reduce((s,x)=> s + x.amount, 0);
+  const netProfit = grossProfit - expensesTotal;
+
+  document.getElementById('repRevenue').textContent = money(revenue);
+  document.getElementById('repProfit').textContent = money(netProfit);
+  document.getElementById('repExpenses').textContent = money(expensesTotal);
+
+  const byProduct = {};
+  sales.forEach(s=>{
+    if(!byProduct[s.productName]) byProduct[s.productName] = {grams:0, profit:0};
+    byProduct[s.productName].grams += s.grams;
+    byProduct[s.productName].profit += s.profit;
+  });
+  const rows = Object.entries(byProduct).sort((a,b)=> b[1].profit - a[1].profit);
+  document.getElementById('repTop').textContent = rows.length ? rows[0][0] : '—';
+
+  const body = document.getElementById('reportTableBody');
+  if(rows.length===0){ body.innerHTML = `<tr class="empty-row"><td colspan="3">مفيش مبيعات في المدة دي</td></tr>`; return; }
+  body.innerHTML = rows.map(([name,v])=>`
+    <tr><td>${name}</td><td>${v.grams.toFixed(1)} جم</td><td class="${v.profit>=0?'profit-pos':'profit-neg'}">${money(v.profit)}</td></tr>
+  `).join('');
+}
+
+/* ---------- init ---------- */
+onAuthStateChanged(auth, user=>{
+  if(user) loadDay(currentDate);
+});
+</script>
+</body>
+</html>
