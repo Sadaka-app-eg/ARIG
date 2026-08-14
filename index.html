@@ -433,6 +433,255 @@ tr:hover td{background:rgba(201,161,90,0.04);}
     display: none;
   }
 }
+  /* زرار ومودال حاسبة تركيبة العطور */
+.blend-btn {
+  background: linear-gradient(135deg, rgba(201, 161, 90, 0.2), rgba(42, 32, 21, 0.6));
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all .2s;
+}
+.blend-btn:hover {
+  background: var(--amber);
+  color: var(--bg);
+}
+.blend-btn img {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.modal-blend-watermark {
+  position: absolute;
+  right: -20px;
+  bottom: -20px;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  opacity: 0.08;
+  pointer-events: none;
+  object-fit: cover;
+}
+
+.blend-calc-card {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px dashed var(--border);
+  border-radius: 10px;
+  padding: 12px;
+  margin-top: 10px;
+}
+.blend-calc-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+.blend-calc-row strong {
+  color: var(--amber-light);
+}
+  /* تنسيق مودال وخيارات الفاتورة */
+.invoice-actions-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--gold);
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  cursor: pointer;
+  margin-left: 4px;
+  transition: all .2s;
+}
+.invoice-actions-btn:hover {
+  background: var(--surface-2);
+  border-color: var(--gold);
+}
+
+/* ورقة الفاتورة الحرارية للطباعة */
+.receipt-paper {
+  background: #fff;
+  color: #000;
+  padding: 16px;
+  border-radius: 8px;
+  font-family: 'Cairo', sans-serif;
+  max-width: 280px;
+  margin: 0 auto 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  text-align: center;
+}
+.receipt-header img {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  margin-bottom: 6px;
+}
+.receipt-title {
+  font-size: 18px;
+  font-weight: 800;
+  margin-bottom: 2px;
+  color: #15100b;
+}
+.receipt-subtitle {
+  font-size: 10px;
+  color: #666;
+  margin-bottom: 12px;
+  border-bottom: 1px dashed #ccc;
+  padding-bottom: 8px;
+}
+.receipt-details {
+  text-align: right;
+  font-size: 12px;
+  line-height: 1.8;
+  border-bottom: 1px dashed #ccc;
+  padding-bottom: 8px;
+  margin-bottom: 8px;
+}
+.receipt-details div {
+  display: flex;
+  justify-content: space-between;
+}
+.receipt-total {
+  font-size: 15px;
+  font-weight: 800;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+}
+.receipt-footer {
+  font-size: 10px;
+  color: #777;
+  margin-top: 12px;
+}
+
+/* إخفاء كل العناصر أثناء الطباعة والتركيز على الفاتورة فقط */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #receiptModalContainer, #receiptModalContainer * {
+    visibility: visible;
+  }
+  #receiptModalContainer {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  .no-print {
+    display: none !important;
+  }
+}
+  /* كارت تنبيهات العجز في المخزون */
+.low-stock-banner {
+  background: linear-gradient(135deg, rgba(193, 85, 75, 0.15), var(--surface));
+  border: 1px solid rgba(193, 85, 75, 0.4);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+  display: none; /* بيظهر أوتوماتيك لو فيه عجز */
+}
+
+.low-stock-banner.active {
+  display: block;
+}
+
+.low-stock-watermark {
+  position: absolute;
+  left: -15px;
+  bottom: -15px;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  opacity: 0.10;
+  pointer-events: none;
+  object-fit: cover;
+}
+
+.low-stock-title {
+  color: var(--danger);
+  font-weight: 800;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.low-stock-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.low-stock-chip {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.low-stock-chip b {
+  color: var(--danger);
+}
+
+.low-stock-chip button {
+  background: var(--gold);
+  color: var(--bg);
+  border: none;
+  border-radius: 6px;
+  padding: 2px 8px;
+  font-weight: 700;
+  font-size: 10px;
+  cursor: pointer;
+}
+  /* زر التصدير لـ Excel والعلامة المائية للتقارير */
+.excel-export-btn {
+  background: linear-gradient(135deg, #1d6f42, #10492a);
+  color: #fff;
+  padding: 8px 18px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid #28a745;
+  cursor: pointer;
+  transition: all .2s ease;
+}
+.excel-export-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+}
+
+.report-card-watermark {
+  position: relative;
+  overflow: hidden;
+}
+.report-watermark-bg {
+  position: absolute;
+  left: -20px;
+  bottom: -20px;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  opacity: 0.08;
+  pointer-events: none;
+  object-fit: cover;
+}
 </style>
 </head>
 <body>
@@ -495,8 +744,12 @@ tr:hover td{background:rgba(201,161,90,0.04);}
       <!-- الصورة الشفافة خلف الجدول بالكامل -->
       <img src="icon6.png" class="table-watermark" alt="ARIG">
 
-      <div class="card-head">
+<div class="card-head">
         <h2>مبيعات اليوم</h2>
+        <button class="blend-btn" id="openBlendBtn">
+          <img src="icon5.png" alt="تركيب">
+          <span>تركيب زجاجة</span>
+        </button>
       </div>
 
       <div class="table-responsive">
@@ -625,7 +878,44 @@ tr:hover td{background:rgba(201,161,90,0.04);}
     </div>
   </div>
 </div>
+<!-- ===== MODAL: Invoice / Receipt ===== -->
+<div class="overlay" id="modalReceipt">
+  <div class="modal" id="receiptModalContainer" style="text-align: center;">
+    <h3 class="no-print" style="margin-bottom: 12px;">فاتورة بيع</h3>
+    
+    <!-- شكل الفاتورة الحرارية المجهزة للطباعة -->
+    <div class="receipt-paper" id="receiptPaper">
+      <div class="receipt-header">
+        <img src="icon4.png" alt="ARIG">
+        <div class="receipt-title">ARIG PERFUMES</div>
+        <div class="receipt-subtitle">أريج للعطور — إيصال عملية بيع</div>
+      </div>
+      
+      <div class="receipt-details">
+        <div><span>الصنف:</span> <strong id="recProduct">-</strong></div>
+        <div><span>الكمية:</span> <strong id="recGrams">-</strong></div>
+        <div><span>سعر الجرام:</span> <strong id="recPrice">-</strong></div>
+        <div><span>التاريخ والوقت:</span> <span id="recTime">-</span></div>
+      </div>
 
+      <div class="receipt-total">
+        <span>الإجمالي:</span>
+        <span id="recTotal" style="color:#15100b;">0 ج.م</span>
+      </div>
+
+      <div class="receipt-footer">
+        شكراً لتسوقكم من أريج للعطور ✨
+      </div>
+    </div>
+
+    <!-- أزرار الإجراءات -->
+    <div class="modal-actions no-print" style="flex-direction: column; gap: 8px;">
+      <button class="btn-primary" id="shareWhatsappBtn" style="background: #25D366; color: #fff;">💬 مشاركة عبر WhatsApp</button>
+      <button class="btn-primary" id="printReceiptBtn">🖨️ طباعة الإيصال</button>
+      <button class="btn-cancel" data-close>إغلاق</button>
+    </div>
+  </div>
+</div>
 <!-- ===== MODAL: restock ===== -->
 <div class="overlay" id="modalRestock">
   <div class="modal">
@@ -638,7 +928,65 @@ tr:hover td{background:rgba(201,161,90,0.04);}
     </div>
   </div>
 </div>
+<!-- ===== MODAL: custom blend calculator ===== -->
+<div class="overlay" id="modalBlend">
+  <div class="modal" style="position: relative; overflow: hidden;">
+    <!-- الصورة الشفافة في خلفية المودال -->
+    <img src="icon4.png" class="modal-blend-watermark" alt="ARIG">
+    
+    <h3>حاسبة تركيب العطور</h3>
+    
+    <div class="field">
+      <label>حجم الزجاجة (مل)</label>
+      <select id="blendBottleSize">
+        <option value="30">زجاجة 30 مل</option>
+        <option value="50" selected>زجاجة 50 مل</option>
+        <option value="100">زجاجة 100 مل</option>
+      </select>
+    </div>
 
+    <div class="field">
+      <label>الزيت العطري الرئيسي</label>
+      <select id="blendProduct"></select>
+    </div>
+
+    <div class="field">
+      <label>وزن الزيت المطلوب (جرام)</label>
+      <input type="number" id="blendGrams" min="0.1" step="0.1" placeholder="مثال: 15">
+    </div>
+
+    <div class="field">
+      <label>سعر الكحول + الزجاجة + التغليف (ج.م)</label>
+      <input type="number" id="blendExtraCost" min="0" step="1" value="15" placeholder="مثال: 15">
+    </div>
+
+    <div class="field">
+      <label>سعر بيع التركيبة النهائي (ج.م)</label>
+      <input type="number" id="blendSellPrice" min="0" step="1" placeholder="سعر البيع للزبون">
+    </div>
+
+    <!-- ملخص التكلفة والربح اللحظي -->
+    <div class="blend-calc-card">
+      <div class="blend-calc-row">
+        <span>تكلفة الزيت عليك:</span>
+        <strong id="blendOilCost">0 ج.م</strong>
+      </div>
+      <div class="blend-calc-row">
+        <span>التكلفة الكلية (زيت + إضافات):</span>
+        <strong id="blendTotalCost">0 ج.م</strong>
+      </div>
+      <div class="blend-calc-row" style="margin-bottom:0;">
+        <span>صافي ربح الزجاجة:</span>
+        <strong id="blendEstimatedProfit" style="color:var(--success);">0 ج.م</strong>
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-cancel" data-close>إلغاء</button>
+      <button class="btn-primary" id="saveBlendBtn">تسجيل كـ بيعة</button>
+    </div>
+  </div>
+</div>
 <!-- ===== MODAL: expense ===== -->
 <div class="overlay" id="modalExpense">
   <div class="modal">
@@ -982,7 +1330,8 @@ function renderSales(filter=''){
       <td>${s.grams}</td>
       <td class="${s.profit>=0?'profit-pos':'profit-neg'}">${money(s.profit)}</td>
       <td><span class="time-tag">${displayTime || 'الآن'}</span></td>
-      <td>
+<td>
+        <button class="invoice-actions-btn" data-sale-receipt='${JSON.stringify(s).replace(/'/g, "&apos;")}' title="فاتورة / مشاركة">🧾</button>
         <button class="row-del" data-sale-del="${s.id}" data-grams="${s.grams}" data-pid="${s.productId}" title="حذف">✕</button>
       </td>
     </tr>`;
@@ -993,6 +1342,9 @@ function renderSales(filter=''){
     await deleteDoc(doc(db, 'days', currentDate, 'sales', b.dataset.saleDel));
     await updateDoc(doc(db, 'products', b.dataset.pid), { stockGrams: increment(parseFloat(b.dataset.grams)) });
     toast('تم الحذف واسترجاع الكمية للمخزون');
+  });
+  body.querySelectorAll('[data-sale-receipt]').forEach(b => {
+    b.onclick = () => openReceiptModal(JSON.parse(b.dataset.saleReceipt));
   });
 }
 
@@ -1173,6 +1525,140 @@ const bModal = document.getElementById('bottleImgModal');
 if(bModal){
   bModal.onclick = () => bModal.classList.remove('active');
 }
+  /* =========================================================
+   حاسبة تركيب العطور وتكلفتها
+   ========================================================= */
+const openBlendBtn = document.getElementById('openBlendBtn');
+if(openBlendBtn) {
+  openBlendBtn.onclick = () => {
+    if(products.length === 0){ toast('ضيف أصناف أولاً من تبويب المخزون'); return; }
+    
+    // تعبئة خيارات الزيوت
+    const sel = document.getElementById('blendProduct');
+    sel.innerHTML = products.map(p=>`<option value="${p.id}">${p.name} (متبقي ${p.stockGrams ?? 0} جم)</option>`).join('');
+    
+    // قيم افتراضية
+    document.getElementById('blendGrams').value = '15';
+    document.getElementById('blendExtraCost').value = '15';
+    
+    calculateBlend();
+    document.getElementById('modalBlend').classList.add('active');
+  };
+}
+
+// دالة الحساب اللحظي للتكلفة والربح
+function calculateBlend() {
+  const pid = document.getElementById('blendProduct').value;
+  const grams = parseFloat(document.getElementById('blendGrams').value) || 0;
+  const extraCost = parseFloat(document.getElementById('blendExtraCost').value) || 0;
+  const sellPrice = parseFloat(document.getElementById('blendSellPrice').value) || 0;
+  
+  const p = products.find(x => x.id === pid);
+  if(!p) return;
+
+  const buyPricePerGram = p.buyPrice || 0;
+  const oilCost = buyPricePerGram * grams;
+  const totalCost = oilCost + extraCost;
+  const profit = sellPrice - totalCost;
+
+  document.getElementById('blendOilCost').textContent = money(oilCost);
+  document.getElementById('blendTotalCost').textContent = money(totalCost);
+  
+  const profitEl = document.getElementById('blendEstimatedProfit');
+  profitEl.textContent = money(profit);
+  profitEl.style.color = profit >= 0 ? 'var(--success)' : 'var(--danger)';
+
+  // اقتراح سعر بيع أوتوماتيك لو الحقل فاضي
+  if (!document.getElementById('blendSellPrice').value && grams > 0) {
+    const suggestedSell = Math.ceil((p.sellPrice * grams + extraCost) / 5) * 5;
+    document.getElementById('blendSellPrice').value = suggestedSell;
+    calculateBlend();
+  }
+}
+/* =========================================================
+   منطق الفاتورة والمشاركة والطباعة
+   ========================================================= */
+let currentReceiptData = null;
+
+window.openReceiptModal = function(saleData) {
+  currentReceiptData = saleData;
+  
+  const totalAmount = saleData.sellPrice * saleData.grams;
+  
+  document.getElementById('recProduct').textContent = saleData.productName;
+  document.getElementById('recGrams').textContent = `${saleData.grams} جم`;
+  document.getElementById('recPrice').textContent = `${saleData.buyPrice || saleData.sellPrice} ج.م`;
+  document.getElementById('recTime').textContent = `${saleData.date} | ${saleData.time || ''}`;
+  document.getElementById('recTotal').textContent = money(totalAmount);
+
+  document.getElementById('modalReceipt').classList.add('active');
+};
+
+// طباعة الإيصال
+document.getElementById('printReceiptBtn').onclick = () => {
+  window.print();
+};
+
+// مشاركة الفاتورة عبر واتساب
+document.getElementById('shareWhatsappBtn').onclick = () => {
+  if (!currentReceiptData) return;
+  const totalAmount = currentReceiptData.sellPrice * currentReceiptData.grams;
+  
+  const message = `✨ *فاتورة من أريج للعطور (ARIG)* ✨\n` +
+                  `-----------------------------\n` +
+                  `🌸 *الصنف:* ${currentReceiptData.productName}\n` +
+                  `⚖️ *الكمية:* ${currentReceiptData.grams} جرام\n` +
+                  `💰 *الإجمالي:* ${money(totalAmount)}\n` +
+                  `📅 *التاريخ:* ${currentReceiptData.date} (${currentReceiptData.time || ''})\n` +
+                  `-----------------------------\n` +
+                  `سُعدنا بزيارتكم! 🌿`;
+
+  const encodedMsg = encodeURIComponent(message);
+  window.open(`https://wa.me/?text=${encodedMsg}`, '_blank');
+};
+// مراقبة التغييرات للحساب المباشر
+['blendProduct', 'blendGrams', 'blendExtraCost', 'blendSellPrice'].forEach(id => {
+  const el = document.getElementById(id);
+  if(el) el.addEventListener('input', calculateBlend);
+});
+
+// حفظ التركيبة كـ بيعة في المبيعات اليومية وخصم الجرامات
+document.getElementById('saveBlendBtn').onclick = async () => {
+  const pid = document.getElementById('blendProduct').value;
+  const grams = parseFloat(document.getElementById('blendGrams').value);
+  const extraCost = parseFloat(document.getElementById('blendExtraCost').value) || 0;
+  const sellPrice = parseFloat(document.getElementById('blendSellPrice').value);
+  const bottleSize = document.getElementById('blendBottleSize').value;
+  
+  const p = products.find(x => x.id === pid);
+  if(!p || !grams || grams <= 0 || !sellPrice){ toast('اكمل بيانات التركيبة بشكل صحيح'); return; }
+  if(grams > (p.stockGrams ?? 0)){ if(!confirm('كمية الزيت أكبر من الرصيد المتاح، تكمل؟')) return; }
+
+  const now = new Date();
+  const timeStr = now.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit', hour12: true });
+
+  // سعر الشراء الفعلي للجرام متضمناً تكلفة الزجاجة والكحول مقسومة على الجرامات
+  const effectiveBuyPrice = p.buyPrice + (extraCost / grams);
+  const profit = sellPrice - (effectiveBuyPrice * grams);
+
+  await addDoc(collection(db, 'days', currentDate, 'sales'), {
+    date: currentDate,
+    time: timeStr,
+    productId: pid,
+    productName: `تركيب ${bottleSize}مل (${p.name})`,
+    grams: grams,
+    buyPrice: Math.round(effectiveBuyPrice * 100) / 100,
+    sellPrice: Math.round((sellPrice / grams) * 100) / 100,
+    profit: profit,
+    createdAt: serverTimestamp()
+  });
+
+  // خصم كمية الزيت من رصيد المخزون
+  await updateDoc(doc(db, 'products', pid), { stockGrams: increment(-grams) });
+  
+  toast('تم تسجيل تركيب الزجاجة وخصم الزيت من المخزون بنجاح');
+  document.getElementById('modalBlend').classList.remove('active');
+};
 </script>
   <!-- نافذة تكبير اللوجو -->
 <div class="img-modal" id="logoModal">
