@@ -961,9 +961,8 @@ body.modal-open {
       
 <div class="receipt-details">
         <div><span>اسم الصنف:</span> <strong id="recProduct">-</strong></div>
-        <div><span>عدد الجرامات:</span> <strong id="recGrams">-</strong></div>
-        <div><span>سعر جرام (شراء):</span> <strong id="recBuyPrice">-</strong></div>
-        <div><span>سعر جرام (بيع):</span> <strong id="recSellPrice">-</strong></div>
+        <div><span>الكمية:</span> <strong id="recGrams">-</strong></div>
+        <div><span>سعر الجرام:</span> <strong id="recSellPrice">-</strong></div>
         <div><span>التاريخ والوقت:</span> <span id="recTime">-</span></div>
       </div>
 
@@ -1719,7 +1718,6 @@ function calculateBlend() {
    منطق الفاتورة والمشاركة والطباعة
    ========================================================= */
 let currentReceiptData = null;
-
 window.openReceiptModal = function(saleData) {
   currentReceiptData = saleData;
   
@@ -1727,13 +1725,12 @@ window.openReceiptModal = function(saleData) {
   
   document.getElementById('recProduct').textContent = saleData.productName;
   document.getElementById('recGrams').textContent = `${saleData.grams} جم`;
-  document.getElementById('recBuyPrice').textContent = `${saleData.buyPrice || 0} ج.م`;
   document.getElementById('recSellPrice').textContent = `${saleData.sellPrice || 0} ج.م`;
   document.getElementById('recTime').textContent = `${saleData.date} | ${saleData.time || ''}`;
   document.getElementById('recTotal').textContent = money(totalAmount);
 
   document.getElementById('modalReceipt').classList.add('active');
-  document.body.classList.add('modal-open'); // تثبيت الشاشة الخلفية
+  document.body.classList.add('modal-open');
 };
 
 // طباعة الإيصال
