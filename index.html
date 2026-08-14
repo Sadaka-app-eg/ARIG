@@ -7,6 +7,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
   <!-- مكتبة تصدير ملفات Excel -->
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <!-- مكتبة تحويل HTML إلى صورة PNG -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <!-- PWA Manifest & Icons -->
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#15100b">
@@ -706,6 +708,31 @@ tr:hover td{background:rgba(201,161,90,0.04);}
   pointer-events: none;
   object-fit: cover;
 }
+
+  /* منع التمرير في خلفية الصفحة عند فتح أي Modal */
+body.modal-open {
+  overflow: hidden !important;
+  touch-action: none;
+}
+
+/* تحسين تجربة المودال على هواتف الموبايل */
+.overlay {
+  padding: 12px !important;
+  align-items: flex-end; /* لسهولة الوصول بالأصابع على الشاشات الصغرى */
+}
+
+@media (min-width: 640px) {
+  .overlay {
+    align-items: center;
+  }
+}
+
+.modal {
+  max-height: 85vh !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch; /* تمرير ناعم على أجهزة آيفون وأندرويد */
+  margin-bottom: 10px;
+}
 </style>
 </head>
 <body>
@@ -949,10 +976,11 @@ tr:hover td{background:rgba(201,161,90,0.04);}
       </div>
     </div>
 
-    <!-- أزرار الإجراءات -->
+<!-- أزرار الإجراءات -->
     <div class="modal-actions no-print" style="flex-direction: column; gap: 8px;">
-      <button class="btn-primary" id="shareWhatsappBtn" style="background: #25D366; color: #fff;">💬 مشاركة عبر WhatsApp</button>
-      <button class="btn-primary" id="printReceiptBtn">🖨️ طباعة الإيصال</button>
+      <button class="btn-primary" id="downloadReceiptImgBtn" style="background: linear-gradient(135deg, var(--gold), var(--amber)); color: var(--bg);">📸 تحميل الفاتورة كصورة</button>
+      <button class="btn-primary" id="shareWhatsappBtn" style="background: #25D366; color: #fff;">💬 مشاركة نصية عبر WhatsApp</button>
+      <button class="btn-primary" id="printReceiptBtn" style="background: var(--surface-2); color: var(--ivory); border: 1px solid var(--border);">🖨️ طباعة الإيصال</button>
       <button class="btn-cancel" data-close>إغلاق</button>
     </div>
   </div>
@@ -1139,9 +1167,21 @@ document.querySelectorAll('.tab-btn').forEach(btn=>{
 });
 
 /* ---------- modals ---------- */
-document.querySelectorAll('[data-close]').forEach(b=>b.onclick = ()=>b.closest('.overlay').classList.remove('active'));
-document.querySelectorAll('.overlay').forEach(ov=> ov.addEventListener('click', e=>{ if(e.target===ov) ov.classList.remove('active'); }));
+// دالة إغلاق أي نافذة منبثقة وإعادة تفعيل التمرير للصفحة الرئيسية
+function closeModal(overlayEl) {
+  if(overlayEl) overlayEl.classList.remove('active');
+  document.body.classList.remove('modal-open');
+}
 
+document.querySelectorAll('[data-close]').forEach(b => {
+  b.onclick = () => closeModal(b.closest('.overlay'));
+});
+
+document.querySelectorAll('.overlay').forEach(ov => {
+  ov.addEventListener('click', e => {
+    if (e.target === ov) closeModal(ov);
+  });
+});
 document.getElementById('fabAdd').onclick = ()=>{
   const activeView = document.querySelector('.view.active').id;
   if(activeView === 'view-stock'){ openProductModal(); }
@@ -1640,7 +1680,8 @@ if(openBlendBtn) {
     document.getElementById('blendExtraCost').value = '15';
     
     calculateBlend();
-    document.getElementById('modalBlend').classList.add('active');
+document.getElementById('modalBlend').classList.add('active');
+document.body.classList.add('modal-open'); // تثبيت الصفحة الرئيسية
   };
 }
 
@@ -1714,6 +1755,30 @@ document.getElementById('shareWhatsappBtn').onclick = () => {
   const encodedMsg = encodeURIComponent(message);
   window.open(`https://wa.me/?text=${encodedMsg}`, '_blank');
 };
+  // تنزيل الفاتورة كصورة PNG
+document.getElementById('downloadReceiptImgBtn').onclick = () => {
+  const receiptElement = document.getElementById('receiptPaper');
+  if (!receiptElement) return;
+
+  toast('جاري تجهيز صورة الفاتورة... ⏳');
+
+  // تحويل العنصر لصورة عالية الدقة مع حفظ الخلفية والشفافية
+  html2canvas(receiptElement, {
+    scale: 3, // جودة ممتازة للطباعة والعرض
+    useCORS: true,
+    backgroundColor: "#ffffff"
+  }).then(canvas => {
+    const link = document.createElement('a');
+    const productName = currentReceiptData ? currentReceiptData.productName : 'ARIG';
+    link.download = `فاتورة_${productName}_${fmtDate(new Date())}.png`;
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+    toast('تم تحميل الفاتورة كصورة بنجاح 📸');
+  }).catch(err => {
+    console.error('Error generating receipt image:', err);
+    toast('حدث خطأ أثناء تحميل الصورة');
+  });
+};
 // مراقبة التغييرات للحساب المباشر
 ['blendProduct', 'blendGrams', 'blendExtraCost', 'blendSellPrice'].forEach(id => {
   const el = document.getElementById(id);
@@ -1755,7 +1820,7 @@ document.getElementById('saveBlendBtn').onclick = async () => {
   await updateDoc(doc(db, 'products', pid), { stockGrams: increment(-grams) });
   
   toast('تم تسجيل تركيب الزجاجة وخصم الزيت من المخزون بنجاح');
-  document.getElementById('modalBlend').classList.remove('active');
+closeModal(document.getElementById('modalBlend'));
 };
 </script>
   <!-- نافذة تكبير اللوجو -->
