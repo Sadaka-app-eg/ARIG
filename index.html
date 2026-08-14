@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ARIG | أريج للعطور</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
+  <!-- مكتبة تصدير ملفات Excel -->
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <!-- PWA Manifest & Icons -->
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#15100b">
@@ -789,20 +791,34 @@ tr:hover td{background:rgba(201,161,90,0.04);}
   </section>
 
   <!-- ============ STOCK VIEW ============ -->
-  <section class="view" id="view-stock">
+<section class="view" id="view-stock">
+    <!-- شريط تنبيهات العجز والزيوت الناقصة -->
+    <div class="low-stock-banner" id="lowStockBanner">
+      <img src="icon5.png" class="low-stock-watermark" alt="ARIG">
+      <div class="low-stock-title">
+        <span>⚠️ أصناف وصلت لحد التنبيه (تأكد من طلبها قريباً):</span>
+      </div>
+      <div class="low-stock-list" id="lowStockList"></div>
+    </div>
+
     <div class="products-grid" id="productsGrid"></div>
   </section>
 
   <!-- ============ REPORTS VIEW ============ -->
   <section class="view" id="view-reports">
-    <div class="range-controls">
-      <button class="preset active" data-range="7">آخر أسبوع</button>
-      <button class="preset" data-range="30">آخر شهر</button>
-      <button class="preset" data-range="custom">مدة مخصصة</button>
-      <input type="date" id="reportFrom" style="display:none">
-      <span id="reportToWrap" style="display:none; color:var(--muted); font-size:13px;">إلى</span>
-      <input type="date" id="reportTo" style="display:none">
-      <button class="go" id="reportGoBtn">احسب</button>
+<div class="range-controls" style="justify-content: space-between;">
+      <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+        <button class="preset active" data-range="7">آخر أسبوع</button>
+        <button class="preset" data-range="30">آخر شهر</button>
+        <button class="preset" data-range="custom">مدة مخصصة</button>
+        <input type="date" id="reportFrom" style="display:none">
+        <span id="reportToWrap" style="display:none; color:var(--muted); font-size:13px;">إلى</span>
+        <input type="date" id="reportTo" style="display:none">
+        <button class="go" id="reportGoBtn">احسب</button>
+      </div>
+      <button class="excel-export-btn" id="exportExcelBtn">
+        📊 تصدير لـ Excel
+      </button>
     </div>
     <div class="report-grid">
       <div class="report-tile"><div class="l">إجمالي المبيعات</div><div class="v" id="repRevenue">—</div></div>
@@ -810,7 +826,8 @@ tr:hover td{background:rgba(201,161,90,0.04);}
       <div class="report-tile"><div class="l">إجمالي المصروفات</div><div class="v" id="repExpenses">—</div></div>
       <div class="report-tile"><div class="l">الصنف الأكتر مبيعًا</div><div class="v" id="repTop" style="font-size:16px;">—</div></div>
     </div>
-    <div class="card">
+<div class="card report-card-watermark">
+      <img src="icon4.png" class="report-watermark-bg" alt="ARIG">
       <div class="card-head"><h2>تفصيل الأصناف في المدة دي</h2></div>
       <table>
         <thead><tr><th>الصنف</th><th>الجرامات المباعة</th><th>الربح</th></tr></thead>
@@ -1119,16 +1136,38 @@ onSnapshot(collection(db,'products'), snap=>{
 function renderProducts(filter=''){
   const grid = document.getElementById('productsGrid');
   const list = products.filter(p=> p.name.includes(filter));
+
+  /* --- فحص الأصناف الناقصة وإظهار التنبيه --- */
+  const lowItems = products.filter(p => (p.stockGrams ?? 0) <= (p.lowAlert ?? 10));
+  const banner = document.getElementById('lowStockBanner');
+  const lowList = document.getElementById('lowStockList');
+
+  if (banner && lowList) {
+    if (lowItems.length > 0) {
+      banner.classList.add('active');
+      lowList.innerHTML = lowItems.map(p => `
+        <div class="low-stock-chip">
+          <span>${p.name}</span>
+          <b>(${p.stockGrams ?? 0} جم)</b>
+          <button onclick="openRestockModal('${p.id}')">تزويد</button>
+        </div>
+      `).join('');
+    } else {
+      banner.classList.remove('active');
+    }
+  }
+
   if(list.length === 0){
     grid.innerHTML = `<div style="color:var(--muted); grid-column:1/-1; text-align:center; padding:40px;">مفيش أصناف. دوس على + عشان تضيف أول صنف.</div>`;
     return;
   }
+  
+  // باقي كود الدالة القديم زي ما هو بدون تغيير...
   grid.innerHTML = list.map(p=>{
     const low = (p.stockGrams ?? 0) <= (p.lowAlert ?? 10);
-    const pct = Math.min(100, Math.round(((p.stockGrams ?? 0) / Math.max(p.lowAlert*3 || 30, 30)) * 100));
     return `
     <div class="product-card ${low?'low':''}">
-<div class="product-top">
+      <div class="product-top">
         <img src="icon5.png" class="product-bottle-img" onclick="openBottleImgModal()" alt="زجاجة عطر">
         <div><div class="product-name" style="display:flex; align-items:center; gap:8px;"><img src="icon6.png" class="product-item-img">${p.name}</div>
           <div class="product-cat">${p.category || ''}</div>
@@ -1211,11 +1250,11 @@ async function deleteProduct(id){
   toast('تم الحذف');
 }
 
-function openRestockModal(id){
+window.openRestockModal = function(id){
   document.getElementById('restockId').value = id;
   document.getElementById('restockAmount').value = '';
   document.getElementById('modalRestock').classList.add('active');
-}
+};
 document.getElementById('saveRestockBtn').onclick = async ()=>{
   const id = document.getElementById('restockId').value;
   const amt = parseFloat(document.getElementById('restockAmount').value);
@@ -1413,13 +1452,18 @@ document.getElementById('reportGoBtn').onclick = async ()=>{
   await runReport(from, to);
 };
 
+let currentReportSalesData = []; // تخزين بيانات المدة للـ Excel
+
 async function runReport(from, to){
   const salesSnap = await getDocs(collectionGroup(db, 'sales'));
   const expSnap = await getDocs(collectionGroup(db, 'expenses'));
 
   const sales = salesSnap.docs.map(d => d.data()).filter(s => s.date >= from && s.date <= to);
   const expenses = expSnap.docs.map(d => d.data()).filter(x => x.date >= from && x.date <= to);
-  const revenue = sales.reduce((s,x)=> s + x.sellPrice*x.grams, 0);
+  
+  currentReportSalesData = sales; // حفظ للـ Excel
+
+  const revenue = sales.reduce((s,x)=> s + (x.sellPrice * x.grams), 0);
   const grossProfit = sales.reduce((s,x)=> s + x.profit, 0);
   const expensesTotal = expenses.reduce((s,x)=> s + x.amount, 0);
   const netProfit = grossProfit - expensesTotal;
@@ -1435,13 +1479,43 @@ async function runReport(from, to){
     byProduct[s.productName].profit += s.profit;
   });
   const rows = Object.entries(byProduct).sort((a,b)=> b[1].profit - a[1].profit);
-document.getElementById('repTop').innerHTML = rows.length ? `<span style="display:inline-flex; align-items:center; gap:6px;"><img src="icon5.png" style="width:22px; height:22px; border-radius:50%; object-fit:cover; border:1px solid var(--gold);">${rows[0][0]}</span>` : '—';
+  
+  document.getElementById('repTop').innerHTML = rows.length ? `<span style="display:inline-flex; align-items:center; gap:6px;"><img src="icon5.png" style="width:22px; height:22px; border-radius:50%; object-fit:cover; border:1px solid var(--gold);">${rows[0][0]}</span>` : '—';
+  
   const body = document.getElementById('reportTableBody');
   if(rows.length===0){ body.innerHTML = `<tr class="empty-row"><td colspan="3">مفيش مبيعات في المدة دي</td></tr>`; return; }
   body.innerHTML = rows.map(([name,v])=>`
     <tr><td>${name}</td><td>${v.grams.toFixed(1)} جم</td><td class="${v.profit>=0?'profit-pos':'profit-neg'}">${money(v.profit)}</td></tr>
   `).join('');
 }
+
+/* ---------- زرار تصدير بيانات التقرير لـ Excel ---------- */
+document.getElementById('exportExcelBtn').onclick = () => {
+  if (!currentReportSalesData || currentReportSalesData.length === 0) {
+    toast('مفيش بيانات مبيعات متوفرة للتقرير حالياً');
+    return;
+  }
+
+  // تجهيز المصفوفة لتصدير Excel
+  const excelRows = currentReportSalesData.map(s => ({
+    "التاريخ": s.date,
+    "الوقت": s.time || '',
+    "اسم الصنف": s.productName,
+    "الجرامات": s.grams,
+    "سعر الشراء (جم)": s.buyPrice,
+    "سعر البيع (جم)": s.sellPrice,
+    "الإجمالي (ج.م)": s.sellPrice * s.grams,
+    "صافي الربح (ج.م)": s.profit
+  }));
+
+  const worksheet = XLSX.utils.json_to_sheet(excelRows);
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, "تقرير المبيعات");
+
+  // تنزيل الملف باسم ARIG_Sales_Report.xlsx
+  XLSX.writeFile(workbook, `ARIG_Sales_Report_${fmtDate(new Date())}.xlsx`);
+  toast('تم تحميل ملف الـ Excel بنجاح 📊');
+};
 
 /* ---------- init ---------- */
 onAuthStateChanged(auth, user=>{
