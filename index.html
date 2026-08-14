@@ -133,6 +133,78 @@ header.top{
 .brand-img:hover {
   transform: scale(1.1);
 }
+
+  /* تصميم كروت المبيعات المفصلة */
+.sales-cards-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 14px;
+}
+
+.sale-item-card {
+  position: relative;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  overflow: hidden;
+  transition: transform 0.2s, border-color 0.2s;
+}
+
+.sale-item-card:hover {
+  border-color: var(--gold);
+}
+
+/* خلفية الصورة الشفافة icon6 داخل كارت البيعة */
+.sale-card-watermark {
+  position: absolute;
+  left: -15px;
+  bottom: -15px;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  object-fit: cover;
+  opacity: 0.12; /* درجة الشفافية عشان متأثرش على الكلام */
+  pointer-events: none;
+  z-index: 1;
+}
+
+.sale-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px dashed var(--border);
+  padding-bottom: 8px;
+  margin-bottom: 10px;
+  position: relative;
+  z-index: 2;
+}
+
+.sale-card-body {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  gap: 10px;
+  position: relative;
+  z-index: 2;
+}
+
+.sale-prop {
+  display: flex;
+  flex-direction: column;
+}
+
+.sale-prop .prop-label {
+  font-size: 10px;
+  color: var(--muted);
+  margin-bottom: 2px;
+}
+
+.sale-prop .prop-val {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ivory);
+}
 /* نافذة تكبير الصورة */
 .img-modal {
   position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 999;
@@ -440,26 +512,13 @@ tr:hover td{background:rgba(201,161,90,0.04);}
       </div>
     </div>
 
-    <div class="card">
+<div class="card">
       <div class="card-head">
         <h2>مبيعات اليوم</h2>
       </div>
-      <table>
-<thead>
-          <tr>
-            <th>اسم الصنف</th>
-            <th>سعر الجرام (شراء)</th>
-            <th>سعر الجرام (بيع)</th>
-            <th>عدد الجرامات</th>
-            <th>صافي الربح</th>
-            <th>وقت العملية</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody id="salesTableBody">
-<tr class="empty-row"><td colspan="7">مفيش مبيعات مسجلة النهارده لسه</td></tr>          
-        </tbody>
-      </table>
+      <div class="sales-cards-wrap" id="salesTableBody">
+        <div style="text-align:center; color:var(--muted); padding:20px;">مفيش مبيعات مسجلة النهارده لسه</div>
+      </div>
     </div>
 
     <div class="card">
@@ -895,11 +954,16 @@ function loadDay(dateStr){
 }
 
 function renderSales(filter=''){
-  const body = document.getElementById('salesTableBody');
-const list = todaySales.filter(s=> s.productName.includes(filter));
-  if(list.length===0){ body.innerHTML = `<tr class="empty-row"><td colspan="7">مفيش مبيعات مسجلة في اليوم ده</td></tr>`; return; }
-body.innerHTML = list.map(s=>{
-    // لو العملية قديمة ومفيهاش وقت، استخرج الوقت من وقت الإنشاء createdAt
+  const container = document.getElementById('salesTableBody');
+  const list = todaySales.filter(s=> s.productName.includes(filter));
+  
+  if(list.length === 0){ 
+    container.innerHTML = `<div style="text-align:center; color:var(--muted); padding:24px; font-size:13px;">مفيش مبيعات مسجلة في اليوم ده</div>`; 
+    return; 
+  }
+  
+  container.innerHTML = list.map(s => {
+    // حساب الوقت للمبيعات القديمة والجديدة
     let displayTime = s.time;
     if (!displayTime && s.createdAt) {
       const d = s.createdAt.toDate ? s.createdAt.toDate() : new Date(s.createdAt);
@@ -907,20 +971,46 @@ body.innerHTML = list.map(s=>{
     }
 
     return `
-    <tr>
-      <td><div class="product-item-title"><img src="icon6.png" class="product-item-img" onclick="openProductImgModal()">${s.productName}</div></td>
-      <td>${s.buyPrice}</td>
-      <td>${s.sellPrice}</td>
-      <td>${s.grams}</td>
-      <td class="${s.profit>=0?'profit-pos':'profit-neg'}">${money(s.profit)}</td>
-      <td><span class="time-tag">${displayTime || 'الآن'}</span></td>
-      <td><button class="row-del" data-sale-del="${s.id}" data-grams="${s.grams}" data-pid="${s.productId}">✕</button></td>
-    </tr>`;
+    <div class="sale-item-card">
+      <!-- الصورة الشفافة في خلفية الكارت -->
+      <img src="icon6.png" class="sale-card-watermark" alt="ARIG">
+      
+      <div class="sale-card-header">
+        <div class="product-item-title">
+          <img src="icon6.png" class="product-item-img" onclick="openProductImgModal()">
+          <span style="font-weight:800; font-size:15px; color:var(--gold);">${s.productName}</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:12px;">
+          <span class="time-tag">${displayTime || 'الآن'}</span>
+          <button class="row-del" data-sale-del="${s.id}" data-grams="${s.grams}" data-pid="${s.productId}" title="حذف العملية">✕</button>
+        </div>
+      </div>
+
+      <div class="sale-card-body">
+        <div class="sale-prop">
+          <span class="prop-label">شراء (الجرام)</span>
+          <span class="prop-val">${s.buyPrice} ج.م</span>
+        </div>
+        <div class="sale-prop">
+          <span class="prop-label">بيع (الجرام)</span>
+          <span class="prop-val">${s.sellPrice} ج.م</span>
+        </div>
+        <div class="sale-prop">
+          <span class="prop-label">عدد الجرامات</span>
+          <span class="prop-val" style="color:var(--amber-light);">${s.grams} جم</span>
+        </div>
+        <div class="sale-prop">
+          <span class="prop-label">صافي الربح</span>
+          <span class="prop-val ${s.profit>=0?'profit-pos':'profit-neg'}">${money(s.profit)}</span>
+        </div>
+      </div>
+    </div>`;
   }).join('');
-  body.querySelectorAll('[data-sale-del]').forEach(b=> b.onclick = async ()=>{
+
+  container.querySelectorAll('[data-sale-del]').forEach(b => b.onclick = async () => {
     if(!confirm('حذف عملية البيع دي؟')) return;
-    await deleteDoc(doc(db,'days',currentDate,'sales',b.dataset.saleDel));
-    await updateDoc(doc(db,'products',b.dataset.pid), { stockGrams: increment(parseFloat(b.dataset.grams)) });
+    await deleteDoc(doc(db, 'days', currentDate, 'sales', b.dataset.saleDel));
+    await updateDoc(doc(db, 'products', b.dataset.pid), { stockGrams: increment(parseFloat(b.dataset.grams)) });
     toast('تم الحذف واسترجاع الكمية للمخزون');
   });
 }
