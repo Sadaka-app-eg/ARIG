@@ -507,7 +507,6 @@ tr:hover td{background:rgba(201,161,90,0.04);}
 }
 
 /* ورقة الفاتورة الحرارية للطباعة */
-/* ورقة الفاتورة الحرارية للطباعة */
 .receipt-paper {
   background: #ffffff;
   color: #000;
@@ -522,18 +521,23 @@ tr:hover td{background:rgba(201,161,90,0.04);}
   overflow: hidden;
 }
 
-/* خلفية صورة أريج التي تغطي ورقة الفاتورة بالكامل */
+/* خلفية الصورة تثبت بالكامل وتغطي الفاتورة كـ Watermark شفافة */
 .receipt-watermark-bg {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.12; /* نسبة الشفافية لضمان وضوح النص فوقها */
+  opacity: 0.10; /* الشفافية مظبوطة عشان الكلام يبان */
   pointer-events: none;
   z-index: 1;
+}
+
+/* رفع محتوى الفاتورة فوق الصورة لتفادي التداخل */
+.receipt-paper > div {
+  position: relative;
+  z-index: 2;
 }
 
 /* ضمان ظهور النصوص والأزرار فوق خلفية الصورة */
@@ -926,7 +930,7 @@ tr:hover td{background:rgba(201,161,90,0.04);}
 <!-- شكل الفاتورة الحرارية المجهزة للطباعة -->
     <div class="receipt-paper" id="receiptPaper">
       <!-- الصورة الشفافة المغطية للفاتورة بالكامل -->
-      <img src="icon6.png" class="receipt-watermark-bg" alt="ARIG">
+      <img src="icon4.png" class="receipt-watermark-bg" alt="ARIG">
 
       <div class="receipt-header">
         <img src="icon4.png" alt="ARIG">
