@@ -507,16 +507,39 @@ tr:hover td{background:rgba(201,161,90,0.04);}
 }
 
 /* ورقة الفاتورة الحرارية للطباعة */
+/* ورقة الفاتورة الحرارية للطباعة */
 .receipt-paper {
-  background: #fff;
+  background: #ffffff;
   color: #000;
-  padding: 16px;
-  border-radius: 8px;
+  padding: 20px 16px;
+  border-radius: 12px;
   font-family: 'Cairo', sans-serif;
-  max-width: 280px;
+  max-width: 290px;
   margin: 0 auto 16px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.4);
   text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* خلفية صورة أريج التي تغطي ورقة الفاتورة بالكامل */
+.receipt-watermark-bg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.12; /* نسبة الشفافية لضمان وضوح النص فوقها */
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ضمان ظهور النصوص والأزرار فوق خلفية الصورة */
+.receipt-paper > * {
+  position: relative;
+  z-index: 2;
 }
 .receipt-header img {
   width: 45px;
@@ -900,8 +923,11 @@ tr:hover td{background:rgba(201,161,90,0.04);}
   <div class="modal" id="receiptModalContainer" style="text-align: center;">
     <h3 class="no-print" style="margin-bottom: 12px;">فاتورة بيع</h3>
     
-    <!-- شكل الفاتورة الحرارية المجهزة للطباعة -->
+<!-- شكل الفاتورة الحرارية المجهزة للطباعة -->
     <div class="receipt-paper" id="receiptPaper">
+      <!-- الصورة الشفافة المغطية للفاتورة بالكامل -->
+      <img src="icon6.png" class="receipt-watermark-bg" alt="ARIG">
+
       <div class="receipt-header">
         <img src="icon4.png" alt="ARIG">
         <div class="receipt-title">ARIG PERFUMES</div>
