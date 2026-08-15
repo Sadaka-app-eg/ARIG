@@ -59,7 +59,6 @@ body {
   flex-direction: column;
 }
 
-/* خلفية متدرجة مع الصورة الشفافة */
 body::before {
   content: "";
   position: fixed;
@@ -92,16 +91,16 @@ header.top {
 }
 .brand-title { font-family: var(--font-display); font-size: 26px; color: var(--gold); }
 
-.header-tools { display: flex; align-items: center; gap: 10px; }
+.header-tools { display: flex; align-items: center; gap: 8px; }
 .icon-btn {
   background: var(--surface-2); border: 1px solid var(--border);
   color: var(--gold); border-radius: 50%; width: 38px; height: 38px;
   display: flex; align-items: center; justify-content: center;
-  font-size: 16px; cursor: pointer; transition: all .2s;
+  font-size: 14px; font-weight: 700; cursor: pointer; transition: all .2s;
 }
 .icon-btn:hover { background: var(--amber); color: var(--bg); }
 
-/* الحاوية الأساسية للشاشات */
+/* الحاوية الأساسية */
 main.kiosk-container {
   flex: 1;
   max-width: 600px;
@@ -176,7 +175,7 @@ main.kiosk-container {
   border: none;
   border-radius: 999px;
   padding: 16px 36px;
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 800;
   cursor: pointer;
   box-shadow: 0 6px 20px rgba(232, 177, 104, 0.3);
@@ -186,7 +185,7 @@ main.kiosk-container {
 }
 .btn-primary-big:active { transform: scale(0.97); }
 
-/* الشاشة 2: اختيار العطر والجرامات */
+/* الشاشة 2: اختيار العطر */
 .page-title {
   font-size: 20px;
   font-weight: 800;
@@ -209,10 +208,17 @@ main.kiosk-container {
   font-size: 15px;
   outline: none;
 }
+[dir="ltr"] .search-wrapper input {
+  padding: 14px 18px 14px 44px;
+}
 .search-wrapper input:focus { border-color: var(--gold); }
 .search-wrapper svg {
   position: absolute; right: 16px; top: 50%;
   transform: translateY(-50%); width: 18px; height: 18px; stroke: var(--muted);
+}
+[dir="ltr"] .search-wrapper svg {
+  right: auto;
+  left: 16px;
 }
 
 .perfume-list {
@@ -297,7 +303,7 @@ main.kiosk-container {
 .bottle-title { font-weight: 800; font-size: 15px; color: var(--ivory); }
 .bottle-price { font-weight: 800; font-size: 16px; color: var(--amber-light); }
 
-/* الشاشة 4: الفاتورة النهائية والتحكم */
+/* الشاشة 4: الفاتورة */
 .receipt-paper {
   background: #ffffff;
   color: #000;
@@ -326,7 +332,9 @@ main.kiosk-container {
 .receipt-header img { width: 50px; height: 50px; border-radius: 50%; margin-bottom: 6px; }
 .receipt-title { font-size: 20px; font-weight: 900; color: #15100b; }
 .receipt-subtitle { font-size: 11px; color: #666; margin-bottom: 12px; border-bottom: 1px dashed #ccc; padding-bottom: 8px; }
-.receipt-details { text-align: right; font-size: 13px; line-height: 2; border-bottom: 1px dashed #ccc; padding-bottom: 8px; margin-bottom: 8px; }
+.receipt-details { font-size: 13px; line-height: 2; border-bottom: 1px dashed #ccc; padding-bottom: 8px; margin-bottom: 8px; }
+[dir="rtl"] .receipt-details { text-align: right; }
+[dir="ltr"] .receipt-details { text-align: left; }
 .receipt-details div { display: flex; justify-content: space-between; }
 .receipt-total { font-size: 18px; font-weight: 900; display: flex; justify-content: space-between; margin-top: 8px; color: #15100b; }
 .receipt-footer { font-size: 11px; color: #777; margin-top: 12px; }
@@ -362,7 +370,7 @@ main.kiosk-container {
   cursor: pointer;
 }
 
-/* الشاشة 5: شاشة الشكر والترحيب */
+/* الشاشة 5: شاشة الشكر */
 .thanks-card {
   text-align: center;
   background: var(--surface);
@@ -376,7 +384,7 @@ main.kiosk-container {
 .thanks-title { font-family: var(--font-display); font-size: 32px; color: var(--gold); margin-bottom: 8px; }
 .thanks-desc { font-size: 16px; color: var(--ivory); opacity: 0.9; margin-bottom: 26px; line-height: 1.8; }
 
-/* لوحة الإدارة لصاحب المحل */
+/* لوحة الإدارة */
 .overlay {
   position: fixed; inset: 0; background: rgba(10,7,4,0.85);
   display: none; align-items: center; justify-content: center;
@@ -412,143 +420,144 @@ main.kiosk-container {
     <div class="brand-title">ARIG</div>
   </div>
   <div class="header-tools">
-    <button class="icon-btn" id="themeToggleBtn" title="تغيير المظهر">☀️</button>
-    <button class="icon-btn" id="openAdminModalBtn" title="إدارة الزيوت العطرية">⚙️</button>
+    <button class="icon-btn" id="langToggleBtn" title="Language">EN</button>
+    <button class="icon-btn" id="themeToggleBtn" title="Theme">☀️</button>
+    <button class="icon-btn" id="openAdminModalBtn" title="Admin">⚙️</button>
   </div>
 </header>
 
 <main class="kiosk-container">
 
-  <!-- الشاشة 1: الواجهة الترحيبية -->
+  <!-- الشاشة 1: الترحيب -->
   <section class="step-view active" id="step-welcome">
     <div class="hero-card">
       <img src="icon6.png" class="hero-watermark" alt="ARIG">
       <div class="hero-content">
         <img src="icon4.png" alt="ARIG" class="hero-logo-big">
-        <h1 class="hero-title">مرحباً بك في أريج</h1>
-        <p class="hero-desc">استكشف عالم العطور الفاخرة واختر تركيبتك الخاصة بكل سهولة وذوق رفيع.</p>
-        <button class="btn-primary-big" id="startOrderBtn">اضغط هنا لشراء زجاجتك المفضلة</button>
+        <h1 class="hero-title" data-i18n="welcome_title">مرحباً بك في أريج</h1>
+        <p class="hero-desc" data-i18n="welcome_desc">استكشف عالم العطور الفاخرة واختر تركيبتك الخاصة بكل سهولة وذوق رفيع.</p>
+        <button class="btn-primary-big" id="startOrderBtn" data-i18n="welcome_btn">اضغط هنا لشراء زجاجتك المفضلة</button>
       </div>
     </div>
   </section>
 
-  <!-- الشاشة 2: البحث واختيار العطر وعدد الجرامات -->
+  <!-- الشاشة 2: البحث واختيار العطر -->
   <section class="step-view" id="step-perfume">
-    <h2 class="page-title">ابحث عن عطرك المفضل 🌸</h2>
+    <h2 class="page-title" data-i18n="search_title">ابحث عن عطرك المفضل 🌸</h2>
     <div class="search-wrapper">
-      <input type="text" id="perfumeSearchInput" placeholder="اكتب اسم العطر أو أول حرف...">
+      <input type="text" id="perfumeSearchInput" placeholder="اكتب اسم العطر أو أول حرف..." data-i18n-ph="search_ph">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
     </div>
 
     <div class="perfume-list" id="perfumeListContainer"></div>
 
     <div class="grams-box" id="gramsBox">
-      <label id="selectedPerfumeLabel">كم جرام من العطر؟</label>
-      <input type="number" id="perfumeGramsInput" min="1" step="1" value="15" placeholder="مثال: 15">
+      <label id="selectedPerfumeLabel" data-i18n="grams_label">كم جرام من العطر؟</label>
+      <input type="number" id="perfumeGramsInput" min="1" step="1" value="15" placeholder="15">
     </div>
 
-    <button class="btn-primary-big" id="goToBottleBtn" style="display:none; margin-top:10px;">اضغط هنا لتكملة عطرك</button>
+    <button class="btn-primary-big" id="goToBottleBtn" style="display:none; margin-top:10px;" data-i18n="next_bottle_btn">اضغط هنا لتكملة عطرك</button>
   </section>
 
   <!-- الشاشة 3: اختيار الزجاجة -->
   <section class="step-view" id="step-bottle">
-    <h2 class="page-title">اضغط هنا لاختيار زجاجتك 🧴</h2>
+    <h2 class="page-title" data-i18n="bottle_title">اضغط هنا لاختيار زجاجتك 🧴</h2>
     
     <div class="bottle-options-grid">
-      <div class="bottle-option-card" data-bottle="زجاجة طويلة" data-price="15">
+      <div class="bottle-option-card" data-bottle-key="bottle_long" data-price="15">
         <div class="bottle-info">
           <img src="icon5.png" class="bottle-icon" alt="زجاجة">
-          <span class="bottle-title">زجاجة طويلة</span>
+          <span class="bottle-title" data-i18n="bottle_long">زجاجة طويلة</span>
         </div>
-        <span class="bottle-price">15 ج.م</span>
+        <span class="bottle-price" data-price-tag="15">15 ج.م</span>
       </div>
 
-      <div class="bottle-option-card" data-bottle="زجاجة بامب أمريكي فقط" data-price="30">
+      <div class="bottle-option-card" data-bottle-key="bottle_pump" data-price="30">
         <div class="bottle-info">
           <img src="icon5.png" class="bottle-icon" alt="زجاجة">
-          <span class="bottle-title">زجاجة بامب أمريكي فقط</span>
+          <span class="bottle-title" data-i18n="bottle_pump">زجاجة بامب أمريكي فقط</span>
         </div>
-        <span class="bottle-price">30 ج.م</span>
+        <span class="bottle-price" data-price-tag="30">30 ج.م</span>
       </div>
 
-      <div class="bottle-option-card" data-bottle="زجاجة بامب أمريكي وكرتون" data-price="40">
+      <div class="bottle-option-card" data-bottle-key="bottle_box" data-price="40">
         <div class="bottle-info">
           <img src="icon5.png" class="bottle-icon" alt="زجاجة">
-          <span class="bottle-title">زجاجة بامب أمريكي وكرتون</span>
+          <span class="bottle-title" data-i18n="bottle_box">زجاجة بامب أمريكي وكرتون</span>
         </div>
-        <span class="bottle-price">40 ج.م</span>
+        <span class="bottle-price" data-price-tag="40">40 ج.م</span>
       </div>
     </div>
   </section>
 
-  <!-- الشاشة 4: الفاتورة النهائية وإتمام الشراء -->
+  <!-- الشاشة 4: الفاتورة -->
   <section class="step-view" id="step-invoice">
-    <h2 class="page-title" style="margin-bottom:18px;">تفاصيل طلبك</h2>
+    <h2 class="page-title" style="margin-bottom:18px;" data-i18n="invoice_head">تفاصيل طلبك</h2>
 
     <div class="receipt-paper" id="kioskReceiptPaper">
       <img src="icon6.png" class="receipt-watermark-bg" alt="ARIG">
       <div class="receipt-header">
         <img src="icon4.png" alt="ARIG">
         <div class="receipt-title">ARIG PERFUMES</div>
-        <div class="receipt-subtitle">أريج للعطور — إيصال طلبك</div>
+        <div class="receipt-subtitle" data-i18n="invoice_sub">أريج للعطور — إيصال طلبك</div>
       </div>
 
       <div class="receipt-details">
-        <div><span>الصنف:</span> <strong id="invPerfumeName">-</strong></div>
-        <div><span>عدد الجرامات:</span> <strong id="invGrams">-</strong></div>
-        <div><span>سعر جرام الزيت:</span> <strong id="invOilPrice">-</strong></div>
-        <div><span>نوع الزجاجة:</span> <strong id="invBottleName">-</strong></div>
-        <div><span>سعر الزجاجة:</span> <strong id="invBottlePrice">-</strong></div>
-        <div><span>التاريخ والوقت:</span> <span id="invDateTime">-</span></div>
+        <div><span data-i18n="inv_perfume">الصنف:</span> <strong id="invPerfumeName">-</strong></div>
+        <div><span data-i18n="inv_grams">عدد الجرامات:</span> <strong id="invGrams">-</strong></div>
+        <div><span data-i18n="inv_oil_price">سعر جرام الزيت:</span> <strong id="invOilPrice">-</strong></div>
+        <div><span data-i18n="inv_bottle_type">نوع الزجاجة:</span> <strong id="invBottleName">-</strong></div>
+        <div><span data-i18n="inv_bottle_price">سعر الزجاجة:</span> <strong id="invBottlePrice">-</strong></div>
+        <div><span data-i18n="inv_time">التاريخ والوقت:</span> <span id="invDateTime">-</span></div>
       </div>
 
       <div class="receipt-total">
-        <span>الإجمالي النهائي:</span>
+        <span data-i18n="inv_total">الإجمالي النهائي:</span>
         <span id="invTotalAmount">0 ج.م</span>
       </div>
 
-      <div class="receipt-footer">
+      <div class="receipt-footer" data-i18n="inv_footer">
         شكراً لاختياركم أريج للعطور ✨
       </div>
     </div>
 
     <div class="checkout-actions-row">
-      <button class="btn-checkout-confirm" id="confirmOrderBtn">إتمام الشراء ✓</button>
-      <button class="btn-checkout-back" id="backToStartBtn">رجوع للبداية</button>
+      <button class="btn-checkout-confirm" id="confirmOrderBtn" data-i18n="btn_confirm">إتمام الشراء ✓</button>
+      <button class="btn-checkout-back" id="backToStartBtn" data-i18n="btn_back">رجوع للبداية</button>
     </div>
   </section>
 
-  <!-- الشاشة 5: شاشة الشكر والترحيب -->
+  <!-- الشاشة 5: شاشة الشكر -->
   <section class="step-view" id="step-thanks">
     <div class="thanks-card">
       <div class="thanks-icon">✨🌸</div>
-      <h2 class="thanks-title">نورت أريج للعطور!</h2>
-      <p class="thanks-desc">تم تأكيد طلبك بنجاح وسنقوم بتجهيز عطرك الفاخر حالاً. يومك عطر وجميل!</p>
-      <button class="btn-primary-big" id="finishAndResetBtn">طلب عطر جديد</button>
+      <h2 class="thanks-title" data-i18n="thanks_title">نورت أريج للعطور!</h2>
+      <p class="thanks-desc" data-i18n="thanks_desc">تم تأكيد طلبك بنجاح وسنقوم بتجهيز عطرك الفاخر حالاً. يومك عطر وجميل!</p>
+      <button class="btn-primary-big" id="finishAndResetBtn" data-i18n="thanks_btn">طلب عطر جديد</button>
     </div>
   </section>
 
 </main>
 
-<!-- مودال لوحة إدارة الزيوت لصاحب المحل -->
+<!-- لوحة الإدارة -->
 <div class="overlay" id="adminModal">
   <div class="modal">
-    <h3>إدارة الزيوت العطرية</h3>
+    <h3 data-i18n="admin_title">إدارة الزيوت العطرية</h3>
     <div class="field">
-      <label>اسم الزيت العطري</label>
-      <input type="text" id="adminName" placeholder="مثال: عود ملكي">
+      <label data-i18n="admin_name">اسم الزيت العطري</label>
+      <input type="text" id="adminName" placeholder="عود ملكي">
     </div>
     <div class="field">
-      <label>سعر بيع الجرام (ج.م)</label>
-      <input type="number" id="adminSellPrice" min="0" step="0.5" placeholder="مثال: 20">
+      <label data-i18n="admin_price">سعر بيع الجرام (ج.م)</label>
+      <input type="number" id="adminSellPrice" min="0" step="0.5" placeholder="20">
     </div>
-    <button class="btn-primary-big" id="adminAddBtn" style="width:100%; padding:10px; margin-bottom:16px;">+ إضافة الزيت</button>
+    <button class="btn-primary-big" id="adminAddBtn" style="width:100%; padding:10px; margin-bottom:16px;" data-i18n="admin_add">+ إضافة الزيت</button>
 
-    <h4 style="color:var(--gold); font-size:14px; margin-bottom:10px;">الأصناف المسجلة حالياً:</h4>
+    <h4 style="color:var(--gold); font-size:14px; margin-bottom:10px;" data-i18n="admin_current">الأصناف المسجلة حالياً:</h4>
     <div id="adminProductsList"></div>
 
     <div style="margin-top:16px; text-align:center;">
-      <button class="btn-checkout-back" style="width:100%;" id="closeAdminBtn">إغلاق</button>
+      <button class="btn-checkout-back" style="width:100%;" id="closeAdminBtn" data-i18n="admin_close">إغلاق</button>
     </div>
   </div>
 </div>
@@ -579,13 +588,139 @@ const db = getFirestore(app);
 enableIndexedDbPersistence(db).catch(() => {});
 signInAnonymously(auth).catch(err => console.error("Auth error:", err));
 
+/* =========================================================
+   نظام اللغات والترجمة (AR / EN)
+   ========================================================= */
+const i18n = {
+  ar: {
+    welcome_title: "مرحباً بك في أريج",
+    welcome_desc: "استكشف عالم العطور الفاخرة واختر تركيبتك الخاصة بكل سهولة وذوق رفيع.",
+    welcome_btn: "اضغط هنا لشراء زجاجتك المفضلة",
+    search_title: "ابحث عن عطرك المفضل 🌸",
+    search_ph: "اكتب اسم العطر أو أول حرف...",
+    no_results: "لا توجد عطور مطابقة للبحث",
+    grams_label: "كم جرام من العطر؟",
+    grams_of: "عدد جرامات",
+    next_bottle_btn: "اضغط هنا لتكملة عطرك",
+    bottle_title: "اضغط هنا لاختيار زجاجتك 🧴",
+    bottle_long: "زجاجة طويلة",
+    bottle_pump: "زجاجة بامب أمريكي فقط",
+    bottle_box: "زجاجة بامب أمريكي وكرتون",
+    invoice_head: "تفاصيل طلبك",
+    invoice_sub: "أريج للعطور — إيصال طلبك",
+    inv_perfume: "الصنف:",
+    inv_grams: "عدد الجرامات:",
+    inv_oil_price: "سعر جرام الزيت:",
+    inv_bottle_type: "نوع الزجاجة:",
+    inv_bottle_price: "سعر الزجاجة:",
+    inv_time: "التاريخ والوقت:",
+    inv_total: "الإجمالي النهائي:",
+    inv_footer: "شكراً لاختياركم أريج للعطور ✨",
+    btn_confirm: "إتمام الشراء ✓",
+    btn_back: "رجوع للبداية",
+    thanks_title: "نورت أريج للعطور!",
+    thanks_desc: "تم تأكيد طلبك بنجاح وسنقوم بتجهيز عطرك الفاخر حالاً. يومك عطر وجميل!",
+    thanks_btn: "طلب عطر جديد",
+    currency: "ج.م",
+    per_gram: "ج/جم",
+    unit_gram: "جم",
+    admin_title: "إدارة الزيوت العطرية",
+    admin_name: "اسم الزيت العطري",
+    admin_price: "سعر بيع الجرام (ج.م)",
+    admin_add: "+ إضافة الزيت",
+    admin_current: "الأصناف المسجلة حالياً:",
+    admin_close: "إغلاق",
+    toast_select_first: "يرجى اختيار العطر وتحديد الجرامات",
+    toast_added: "تمت إضافة الصنف بنجاح",
+    toast_deleted: "تم الحذف",
+    toast_fill: "اكتب اسم الزيت وسعر بيع الجرام"
+  },
+  en: {
+    welcome_title: "Welcome to ARIG",
+    welcome_desc: "Explore the world of luxury perfumes and craft your personalized blend with ease and elegance.",
+    welcome_btn: "Click here to buy your favorite bottle",
+    search_title: "Find Your Favorite Perfume 🌸",
+    search_ph: "Type perfume name or initial...",
+    no_results: "No matching perfumes found",
+    grams_label: "How many grams?",
+    grams_of: "Grams for",
+    next_bottle_btn: "Continue to select bottle",
+    bottle_title: "Choose Your Bottle 🧴",
+    bottle_long: "Long Classic Bottle",
+    bottle_pump: "US Pump Bottle Only",
+    bottle_box: "US Pump Bottle & Box",
+    invoice_head: "Order Details",
+    invoice_sub: "ARIG Perfumes — Order Receipt",
+    inv_perfume: "Perfume:",
+    inv_grams: "Grams:",
+    inv_oil_price: "Oil price/g:",
+    inv_bottle_type: "Bottle Type:",
+    inv_bottle_price: "Bottle Price:",
+    inv_time: "Date & Time:",
+    inv_total: "Total Amount:",
+    inv_footer: "Thank you for choosing ARIG Perfumes ✨",
+    btn_confirm: "Confirm Purchase ✓",
+    btn_back: "Back to Start",
+    thanks_title: "Thank You for Visiting ARIG!",
+    thanks_desc: "Your order is confirmed and will be prepared right away. Have a fragrant day!",
+    thanks_btn: "Order Another Perfume",
+    currency: "EGP",
+    per_gram: "EGP/g",
+    unit_gram: "g",
+    admin_title: "Manage Perfume Oils",
+    admin_name: "Oil Name",
+    admin_price: "Sell Price per Gram",
+    admin_add: "+ Add Perfume Oil",
+    admin_current: "Current Perfumes:",
+    admin_close: "Close",
+    toast_select_first: "Please select a perfume and specify grams",
+    toast_added: "Perfume added successfully",
+    toast_deleted: "Deleted",
+    toast_fill: "Please enter name and price"
+  }
+};
+
+let currentLang = localStorage.getItem('arig_lang') || 'ar';
+
+function applyLanguage(lang) {
+  currentLang = lang;
+  localStorage.setItem('arig_lang', lang);
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+  document.getElementById('langToggleBtn').textContent = lang === 'ar' ? 'EN' : 'عربي';
+
+  // تحديث النصوص ذات السمة data-i18n
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.dataset.i18n;
+    if (i18n[lang][key]) el.textContent = i18n[lang][key];
+  });
+
+  // تحديث نصوص الـ Placeholders
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+    const key = el.dataset.i18nPh;
+    if (i18n[lang][key]) el.placeholder = i18n[lang][key];
+  });
+
+  // تحديث أسعار الزجاجات
+  document.querySelectorAll('[data-price-tag]').forEach(el => {
+    el.textContent = `${el.dataset.priceTag} ${i18n[lang].currency}`;
+  });
+
+  renderPerfumes(document.getElementById('perfumeSearchInput').value);
+  if (selectedPerfume && selectedBottle) prepareInvoice();
+}
+
+document.getElementById('langToggleBtn').onclick = () => {
+  applyLanguage(currentLang === 'ar' ? 'en' : 'ar');
+};
+
 /* ---------- State ---------- */
 let products = [];
 let selectedPerfume = null;
 let selectedBottle = null;
 
 function money(n){
-  return (Math.round((n||0)*100)/100).toLocaleString('ar-EG', {minimumFractionDigits:2, maximumFractionDigits:2}) + " ج.م";
+  return (Math.round((n||0)*100)/100).toLocaleString(currentLang === 'ar' ? 'ar-EG' : 'en-US', {minimumFractionDigits:2, maximumFractionDigits:2}) + ` ${i18n[currentLang].currency}`;
 }
 function toast(msg){
   const t = document.createElement('div');
@@ -594,7 +729,6 @@ function toast(msg){
   setTimeout(()=>t.remove(), 2600);
 }
 
-/* ---------- التنقل بين الشاشات ---------- */
 function showStep(stepId) {
   document.querySelectorAll('.step-view').forEach(v => v.classList.remove('active'));
   const target = document.getElementById(stepId);
@@ -602,28 +736,26 @@ function showStep(stepId) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-/* الشاشة 1: البداية */
 document.getElementById('startOrderBtn').onclick = () => {
   showStep('step-perfume');
   renderPerfumes();
 };
 
-/* ---------- تحميل ومزامنة الأصناف من Firebase ---------- */
 onSnapshot(collection(db, 'products'), snap => {
   products = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-  renderPerfumes();
+  renderPerfumes(document.getElementById('perfumeSearchInput').value);
   renderAdminProducts();
 });
 
-/* الشاشة 2: البحث واختيار العطر */
 function renderPerfumes(searchQuery = '') {
   const container = document.getElementById('perfumeListContainer');
+  if (!container) return;
   const q = searchQuery.trim().toLowerCase();
   
   const filtered = products.filter(p => p.name && p.name.toLowerCase().startsWith(q));
 
   if (filtered.length === 0) {
-    container.innerHTML = `<div style="text-align:center; color:var(--muted); padding:20px; font-size:14px;">لا توجد عطور مطابقة للبحث</div>`;
+    container.innerHTML = `<div style="text-align:center; color:var(--muted); padding:20px; font-size:14px;">${i18n[currentLang].no_results}</div>`;
     return;
   }
 
@@ -633,7 +765,7 @@ function renderPerfumes(searchQuery = '') {
         <img src="icon6.png" class="perfume-option-img" alt="عطر">
         <span class="perfume-option-name">${p.name}</span>
       </div>
-      <span class="perfume-option-price">${p.sellPrice || 0} ج/جم</span>
+      <span class="perfume-option-price">${p.sellPrice || 0} ${i18n[currentLang].per_gram}</span>
     </div>
   `).join('');
 
@@ -643,7 +775,7 @@ function renderPerfumes(searchQuery = '') {
       el.classList.add('selected');
       selectedPerfume = products.find(x => x.id === el.dataset.id);
       
-      document.getElementById('selectedPerfumeLabel').textContent = `عدد جرامات (${selectedPerfume.name}):`;
+      document.getElementById('selectedPerfumeLabel').textContent = `${i18n[currentLang].grams_of} (${selectedPerfume.name}):`;
       document.getElementById('gramsBox').classList.add('active');
       document.getElementById('goToBottleBtn').style.display = 'block';
     };
@@ -657,20 +789,19 @@ document.getElementById('perfumeSearchInput').addEventListener('input', e => {
 document.getElementById('goToBottleBtn').onclick = () => {
   const grams = parseFloat(document.getElementById('perfumeGramsInput').value);
   if(!selectedPerfume || !grams || grams <= 0) {
-    toast('يرجى اختيار العطر وتحديد الجرامات');
+    toast(i18n[currentLang].toast_select_first);
     return;
   }
   showStep('step-bottle');
 };
 
-/* الشاشة 3: اختيار الزجاجة */
 document.querySelectorAll('.bottle-option-card').forEach(card => {
   card.onclick = () => {
     document.querySelectorAll('.bottle-option-card').forEach(c => c.classList.remove('selected'));
     card.classList.add('selected');
 
     selectedBottle = {
-      name: card.dataset.bottle,
+      key: card.dataset.bottleKey,
       price: parseFloat(card.dataset.price)
     };
 
@@ -679,7 +810,6 @@ document.querySelectorAll('.bottle-option-card').forEach(card => {
   };
 });
 
-/* الشاشة 4: تجهيز الفاتورة */
 function prepareInvoice() {
   const grams = parseFloat(document.getElementById('perfumeGramsInput').value) || 0;
   const oilTotal = (selectedPerfume.sellPrice || 0) * grams;
@@ -687,18 +817,17 @@ function prepareInvoice() {
 
   const now = new Date();
   const dateStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
-  const timeStr = now.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit', hour12: true });
+  const timeStr = now.toLocaleTimeString(currentLang === 'ar' ? 'ar-EG' : 'en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
 
   document.getElementById('invPerfumeName').textContent = selectedPerfume.name;
-  document.getElementById('invGrams').textContent = `${grams} جم`;
-  document.getElementById('invOilPrice').textContent = `${selectedPerfume.sellPrice || 0} ج.م`;
-  document.getElementById('invBottleName').textContent = selectedBottle.name;
-  document.getElementById('invBottlePrice').textContent = `${selectedBottle.price} ج.م`;
+  document.getElementById('invGrams').textContent = `${grams} ${i18n[currentLang].unit_gram}`;
+  document.getElementById('invOilPrice').textContent = `${selectedPerfume.sellPrice || 0} ${i18n[currentLang].currency}`;
+  document.getElementById('invBottleName').textContent = i18n[currentLang][selectedBottle.key] || selectedBottle.key;
+  document.getElementById('invBottlePrice').textContent = `${selectedBottle.price} ${i18n[currentLang].currency}`;
   document.getElementById('invDateTime').textContent = `${dateStr} | ${timeStr}`;
   document.getElementById('invTotalAmount').textContent = money(total);
 }
 
-/* إتمام الشراء وحفظ البيعة في قاعدة البيانات */
 document.getElementById('confirmOrderBtn').onclick = async () => {
   const grams = parseFloat(document.getElementById('perfumeGramsInput').value);
   const now = new Date();
@@ -711,7 +840,7 @@ document.getElementById('confirmOrderBtn').onclick = async () => {
     date: dateStr,
     time: timeStr,
     productId: selectedPerfume.id,
-    productName: `${selectedPerfume.name} (${selectedBottle.name})`,
+    productName: `${selectedPerfume.name} (${i18n['ar'][selectedBottle.key] || selectedBottle.key})`,
     grams: grams,
     sellPrice: selectedPerfume.sellPrice,
     bottlePrice: selectedBottle.price,
@@ -722,7 +851,6 @@ document.getElementById('confirmOrderBtn').onclick = async () => {
   showStep('step-thanks');
 };
 
-/* زر الرجوع للبداية */
 function resetKiosk() {
   selectedPerfume = null;
   selectedBottle = null;
@@ -735,7 +863,7 @@ function resetKiosk() {
 document.getElementById('backToStartBtn').onclick = resetKiosk;
 document.getElementById('finishAndResetBtn').onclick = resetKiosk;
 
-/* ---------- لوحة إدارة صاحب المحل (Admin) ---------- */
+/* ---------- Admin ---------- */
 const adminModal = document.getElementById('adminModal');
 document.getElementById('openAdminModalBtn').onclick = () => adminModal.classList.add('active');
 document.getElementById('closeAdminBtn').onclick = () => adminModal.classList.remove('active');
@@ -745,12 +873,12 @@ document.getElementById('adminAddBtn').onclick = async () => {
   const sellPrice = parseFloat(document.getElementById('adminSellPrice').value);
 
   if(!name || isNaN(sellPrice)) {
-    toast('اكتب اسم الزيت وسعر بيع الجرام');
+    toast(i18n[currentLang].toast_fill);
     return;
   }
 
   await addDoc(collection(db, 'products'), { name, sellPrice });
-  toast('تمت إضافة الصنف بنجاح');
+  toast(i18n[currentLang].toast_added);
   document.getElementById('adminName').value = '';
   document.getElementById('adminSellPrice').value = '';
 };
@@ -760,21 +888,21 @@ function renderAdminProducts() {
   if(!list) return;
   list.innerHTML = products.map(p => `
     <div class="admin-perfume-row">
-      <span><b>${p.name}</b> — ${p.sellPrice || 0} ج/جم</span>
-      <button data-del="${p.id}" title="حذف">✕</button>
+      <span><b>${p.name}</b> — ${p.sellPrice || 0} ${i18n[currentLang].per_gram}</span>
+      <button data-del="${p.id}" title="Delete">✕</button>
     </div>
   `).join('');
 
   list.querySelectorAll('[data-del]').forEach(btn => {
     btn.onclick = async () => {
-      if(!confirm('حذف هذا الصنف؟')) return;
+      if(!confirm('Delete this perfume?')) return;
       await deleteDoc(doc(db, 'products', btn.dataset.del));
-      toast('تم الحذف');
+      toast(i18n[currentLang].toast_deleted);
     };
   });
 }
 
-/* ---------- Theme Switcher ---------- */
+/* ---------- Theme ---------- */
 const themeBtn = document.getElementById('themeToggleBtn');
 themeBtn.onclick = () => {
   const isLight = document.documentElement.getAttribute('data-theme') === 'light';
@@ -786,6 +914,9 @@ themeBtn.onclick = () => {
     themeBtn.textContent = '🌙';
   }
 };
+
+// تشغيل اللغة المحفوظة
+applyLanguage(currentLang);
 </script>
 
 </body>
